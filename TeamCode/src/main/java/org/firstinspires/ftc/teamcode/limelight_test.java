@@ -29,86 +29,81 @@
 //MINE ( AARUSH )
 package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
-import org.firstinspires.ftc.robotcore.internal.system.AppUtil;
-import org.firstinspires.ftc.robotcore.external.hardware.camera.Camera;
-import org.firstinspires.ftc.robotcore.external.hardware.camera.CameraManager;
+
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+
+//needed imports for limelight
+import com.qualcomm.hardware.limelightvision.LLResult;
+import com.qualcomm.hardware.limelightvision.LLResultTypes;
+import com.qualcomm.hardware.limelightvision.LLStatus;
+import com.qualcomm.hardware.limelightvision.Limelight3A;
+
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-//import edu.wpi.first.networktables.NetworkTable;
-//import edu.wpi.first.networktables.NetworkTableInstance;
-import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 
+import org.firstinspires.ftc.robotcore.external.navigation.Pose3D;
+import java.util.List;
 
-/**
- * This file contains an minimal example of a Linear "OpMode". An OpMode is a 'program' that runs in either
- * the autonomous or the teleop period of an FTC match. The names of OpModes appear on the menu
- * of the FTC Driver Station. When a selection is made from the menu, the corresponding OpMode
- * class is instantiated on the Robot Controller and executed.
-
- * This particular OpMode just executes a basic Tank Drive Teleop for a two wheeled robot
- * It includes all the skeletal structure that all linear OpModes contain.
-
- * Use Android Studio to Copy this Class, and Paste it into your team's code folder with a new name.
- * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
- */
+//RESET LIMELIGHT IP TO NORMAL
+//https://docs.limelightvision.io/docs/docs-limelight/getting-started/FTC/pipelines
+//name limelight in control hub
 
 
 @Autonomous(name="limelight_test", group="Linear Opmode2")
 public class limelight_test extends CommonUtil {
-
-    Orientation myRobotOrientation;
+    private Limelight3A limelight;
 
 
     @Override
     public void runOpMode() {
-        return;
-        /*
-        //setup
-        telemetry.setAutoClear(false);
-        // initialize hardware
-        initialize(hardwareMap);
-        // Initialize motors
-        setMotorOrientation();
-        //resetMotorEncoderCounts();
-        setMotorToZeroPower();
-        setZeroPowerBehavior();
-        NetworkTable limelight = NetworkTableInstance.getDefault().getTable("limelight");
-
-        // Set the pipeline to the one that detects the blue rectangle
-        limelight.getEntry("yellow-sample").setNumber(1); // Pipeline index for "blue rectangle"
-
-        telemetry.addLine("Pipeline set to 3 for blue rectangle detection.");
+        //initializing limelight
+        limelight = hardwareMap.get(Limelight3A.class, "limelight");
+        limelight.setPollRateHz(100);
+        telemetry.setMsTransmissionInterval(11);
         telemetry.update();
-
-
-
-        // Wait for the game to start (driver presses PLAY)
-        waitForStart();
+        limelight.pipelineSwitch(1);
+        limelight.start();
 
         while (opModeIsActive()) {
-            double tx = limelight.getEntry("tx").getDouble(0.0);  // Horizontal offset
-            double ta = limelight.getEntry("ta").getDouble(0.0);  // Target area
-            double tv = limelight.getEntry("tv").getDouble(0.0);  // Valid target (1 = valid, 0 = no target)
+            LLResult result = limelight.getLatestResult();
+            if (result != null && result.isValid()) {
+                //get target x,y, and area
+                double tx = result.getTx();
+                double ty = result.getTy();
+                double ta = result.getTa();
+                telemetry.addData("Target X", tx);
+                telemetry.addData("Target Y", ty);
+                telemetry.addData("Target Area:", ta);
+                telemetry.update();
+                //figure out where limelight is
+                List<LLResultTypes.FiducialResult> fiducialResults = result.getFiducialResults();
+                for (LLResultTypes.FiducialResult fr : fiducialResults) {
+                    telemetry.addData("Fiducial", "ID: %d, Family: %s, X: %.2f, Y: %.2f", fr.getFiducialId(), fr.getFamily(),fr.getTargetXDegrees(), fr.getTargetYDegrees());
+                }
 
-            // Display values on telemetry
-            telemetry.addData("tx (Horizontal Offset)", tx);
-            telemetry.addData("ta (Target Area)", ta);
-            telemetry.addData("tv (Valid Target Detected)", tv == 1 ? "Yes" : "No");
-            telemetry.update();
+
+
+
+            }else{
+                telemetry.addData("Limelight","No Targets");
+                telemetry.update();
+            }
 
 
 
         }
-        */
+
+        limelight.stop();
+
+
     }
 
-
 }
+
+
+
+
+
 
 
 
