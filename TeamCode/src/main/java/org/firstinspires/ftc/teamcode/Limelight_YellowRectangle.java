@@ -15,8 +15,8 @@ public class Limelight_YellowRectangle extends CommonUtil {
     private Limelight3A limelight;
     private static final double ALIGN_THRESHOLD = 2.0; // Degrees within the center
     private static final double AREA_THRESHOLD = 5.0; // Stop moving when target area >= threshold
-    private static final double TX_CORRECTION_POWER = 0.2; // Power for horizontal alignment
-    private static final double FORWARD_POWER = 0.3; // Power for moving forward
+    private static final double TX_CORRECTION_POWER = -0.2; // Power for horizontal alignment
+    private static final double FORWARD_POWER = -0.3; // Power for moving forward
 
     @Override
     public void runOpMode() {
@@ -24,10 +24,18 @@ public class Limelight_YellowRectangle extends CommonUtil {
         initialize(hardwareMap);
         setMotorOrientation();
         limelight = hardwareMap.get(Limelight3A.class, "limelight");
+        if (limelight == null) {
+            telemetry.addData("Error", "Limelight not found in hardwareMap");
+            telemetry.update();
+        } else {
+            telemetry.addData("Success", "Limelight initialized");
+            telemetry.update();
+        }
+
         limelight.setPollRateHz(100);
         telemetry.setMsTransmissionInterval(11);
         telemetry.update();
-        limelight.pipelineSwitch(1);
+        limelight.pipelineSwitch(3);
         limelight.start();
 
         waitForStart();
@@ -46,15 +54,37 @@ public class Limelight_YellowRectangle extends CommonUtil {
                 // Align horizontally (adjust strafing)
                 if (Math.abs(tx) > ALIGN_THRESHOLD) {
                     if (tx > 0) {
-                        moveSideways_wCorrection("right", 1, TX_CORRECTION_POWER, 1); // Strafe right
+                        telemetry.addData("Sideways:","Right");
+                        telemetry.update();
+                        fl.setPower(-0.4);
+                        fr.setPower(0.4);
+                        bl.setPower(0.4);
+                        br.setPower(-0.4);
+                        sleep(500);
+                        setMotorToZeroPower();
+
                     } else {
-                        moveSideways_wCorrection("left", 1, TX_CORRECTION_POWER, 1); // Strafe left
+                        telemetry.addData("Sideways:","Left");
+                        telemetry.update();
+                        fl.setPower(0.4);
+                        fr.setPower(-0.4);
+                        bl.setPower(-0.4);
+                        br.setPower(0.4);
+                        sleep(500);
+                        setMotorToZeroPower();
                     }
                 }
 
                 // Move forward if area is less than the threshold
                 if (ta < AREA_THRESHOLD) {
-                    moveForward_wDistance_wGyro(2, FORWARD_POWER, 1); // Move forward
+                    telemetry.addData("Forward:","Forward");
+                    telemetry.update();
+                    fl.setPower(-0.3);
+                    fr.setPower(-0.3);
+                    bl.setPower(-0.3);
+                    br.setPower(-0.3);
+                    sleep(500);
+                    setMotorToZeroPower();
                 } else {
                     setMotorToZeroPower();
                     telemetry.addData("Reached Target", "Stopping");
