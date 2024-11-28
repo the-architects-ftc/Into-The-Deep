@@ -34,6 +34,8 @@ public class CommonUtil extends LinearOpMode {
 
     double ENC2DIST = 200/29; //2000.0/48.0; // FW/BW
     double ENC2DIST_SIDEWAYS = 291.1/34.44;
+
+    double test = 0;
     ElapsedTime timer = new ElapsedTime();
 
     //imu init
