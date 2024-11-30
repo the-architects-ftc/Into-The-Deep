@@ -488,12 +488,12 @@ public class CommonUtil extends LinearOpMode {
         //turnToZeroAngle();
         int currEncoderCount = 0;
         double encoderAbsCounts = ENC2DIST_SIDEWAYS*DistanceAbsIn; //2000/42
-        telemetry.addData("sideways:target ", encoderAbsCounts);
-        telemetry.update();
+//        telemetry.addData("sideways:target ", encoderAbsCounts);
+//        telemetry.update();
         setMotorOrientation();
         // Resetting encoder counts
         resetMotorEncoderCounts();
-        telemetry.addData("Encoder count target",encoderAbsCounts);
+//        telemetry.addData("Encoder count target",encoderAbsCounts);
 
         // Setting motor to run in runToPosition\
         bl.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -544,8 +544,8 @@ public class CommonUtil extends LinearOpMode {
                 bl.setPower(blPow);
                 fr.setPower(frPow);
                 br.setPower(brPow);
-                telemetry.addData("sideways:currEncoderCount ", currEncoderCount);
-                telemetry.update();
+//                telemetry.addData("sideways:currEncoderCount ", currEncoderCount);
+//                telemetry.update();
 
             }
             else if (direction.equalsIgnoreCase("right")) {
@@ -564,8 +564,8 @@ public class CommonUtil extends LinearOpMode {
         // return current encoder count
         currEncoderCount = bl.getCurrentPosition();
         myRobotOrientation = imu.getRobotOrientation(AxesReference.INTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES);
-        telemetry.addData("sideways:currEncoderCount (final)", currEncoderCount);
-        telemetry.update();
+//        telemetry.addData("sideways:currEncoderCount (final)", currEncoderCount);
+//        telemetry.update();
         imu.resetYaw();
 
     }

@@ -13,10 +13,8 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 @Autonomous(name = "Limelight_YellowRectangle", group = "Linear Opmode")
 public class Limelight_YellowRectangle extends CommonUtil {
     private Limelight3A limelight;
-    private static final double ALIGN_THRESHOLD = 2.0; // Degrees within the center
-    private static final double AREA_THRESHOLD = 5.0; // Stop moving when target area >= threshold
-    private static final double TX_CORRECTION_POWER = -0.2; // Power for horizontal alignment
-    private static final double FORWARD_POWER = -0.3; // Power for moving forward
+    private static final double ALIGN_THRESHOLD = -14; // Degrees within the center
+    private static final double AREA_THRESHOLD = 0.75; // Stop moving when target area >= threshold
 
     @Override
     public void runOpMode() {
@@ -46,30 +44,31 @@ public class Limelight_YellowRectangle extends CommonUtil {
                 double tx = result.getTx();
                 double ty = result.getTy();
                 double ta = result.getTa();
+
                 telemetry.addData("Target X", tx);
                 telemetry.addData("Target Y", ty);
                 telemetry.addData("Target Area", ta);
                 telemetry.update();
 
-                // Align horizontally (adjust strafing)
-                if (Math.abs(tx) > ALIGN_THRESHOLD) {
+
+                if (Math.abs(tx - ALIGN_THRESHOLD) > 0.1) {
                     if (tx > 0) {
                         telemetry.addData("Sideways:","Right");
                         telemetry.update();
-                        fl.setPower(-0.4);
-                        fr.setPower(0.4);
-                        bl.setPower(0.4);
-                        br.setPower(-0.4);
+                        fl.setPower(0.4);
+                        fr.setPower(-0.4);
+                        bl.setPower(-0.4);
+                        br.setPower(0.4);
                         sleep(500);
                         setMotorToZeroPower();
 
                     } else {
                         telemetry.addData("Sideways:","Left");
                         telemetry.update();
-                        fl.setPower(0.4);
-                        fr.setPower(-0.4);
-                        bl.setPower(-0.4);
-                        br.setPower(0.4);
+                        fl.setPower(-0.4);
+                        fr.setPower(0.4);
+                        bl.setPower(0.4);
+                        br.setPower(-0.4);
                         sleep(500);
                         setMotorToZeroPower();
                     }
@@ -79,11 +78,11 @@ public class Limelight_YellowRectangle extends CommonUtil {
                 if (ta < AREA_THRESHOLD) {
                     telemetry.addData("Forward:","Forward");
                     telemetry.update();
-                    fl.setPower(-0.3);
-                    fr.setPower(-0.3);
-                    bl.setPower(-0.3);
-                    br.setPower(-0.3);
-                    sleep(500);
+                    fl.setPower(0.3);
+                    fr.setPower(0.3);
+                    bl.setPower(0.3);
+                    br.setPower(0.3);
+                    sleep(100);
                     setMotorToZeroPower();
                 } else {
                     setMotorToZeroPower();
