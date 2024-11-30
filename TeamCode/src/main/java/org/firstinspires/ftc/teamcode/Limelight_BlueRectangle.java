@@ -3,9 +3,9 @@ package org.firstinspires.ftc.teamcode;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.qualcomm.hardware.limelightvision.LLResult;
-import com.qualcomm.hardware.limelightvision.LLResultTypes;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.hardware.limelightvision.LLResultTypes;
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
@@ -21,6 +21,7 @@ public class Limelight_BlueRectangle extends CommonUtil{
     public void runOpMode(){
 
         int check = 1;
+        double thres = 0.0; //callibrate new ta value because of new crosshair
         //Initialize Hardware
         initialize(hardwareMap);
         setMotorOrientation();
@@ -48,14 +49,12 @@ public class Limelight_BlueRectangle extends CommonUtil{
                 telemetry.update();
 
 
-
+                //sideways step 1 go to a negative x-axis for sample
                 if (tx > 0) {
                     moveSideways_wCorrection("right", 3, 0.7, 500);
                 }
 
-
-                //callibrate new ta value because of new crosshair
-                double thres = 0.0;
+                //forward/backward step 2 go to the right ta for sample
                 ta = result.getTa();
                 while (check == 1);
                 {
@@ -70,8 +69,8 @@ public class Limelight_BlueRectangle extends CommonUtil{
                             time += 75;
                         }
 
-                        if (fpow < 0.3) {
-                            fpow = 0.3;
+                        if (fpow < 0.2) {
+                            fpow = 0.2;
                             time -= 75;
                         }
                         fl.setPower(fpow);
@@ -92,8 +91,8 @@ public class Limelight_BlueRectangle extends CommonUtil{
                             bpow = 0.6;
                             time += 75;
                         }
-                        if (bpow < 0.3) {
-                            bpow = 0.3;
+                        if (bpow < 0.2) {
+                            bpow = 0.2;
                             time -= 75;
                         }
                         fl.setPower(-bpow);
