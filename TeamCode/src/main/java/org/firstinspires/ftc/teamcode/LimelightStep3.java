@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 public class LimelightStep3 extends CommonUtil{
     //define limelight
     private Limelight3A limelight;
-    double thresx = 0.0; //calibrate for threshold for tx
+    double thresx = -14.5; //calibrate for threshold for tx
     double lpow = 0.0;
     double rpow = 0.0;
     @Override
@@ -30,6 +30,7 @@ public class LimelightStep3 extends CommonUtil{
             //check if there is target and is detected
             if (result != null && result.isValid()) {
                 //get tx value
+                result = limelight.getLatestResult();
                 double tx = result.getTx();
 
                 while (tx - thresx < 0){
@@ -41,11 +42,13 @@ public class LimelightStep3 extends CommonUtil{
                     if (lpow < 0.4){
                         lpow = 0.4;
                     }
+                    lpow = 0.5;
                     moveSideways_wCorrection("left",1,lpow,150);
                     setMotorToZeroPower();
+                    result = limelight.getLatestResult();
                     tx = result.getTx();
                 }
-                while (tx - thresx > 0.1){
+                while (tx - thresx > 0.3){
                     rpow = Math.abs(tx-thresx);
                     if (rpow > 0.6){
                         rpow = 0.6;
@@ -53,11 +56,14 @@ public class LimelightStep3 extends CommonUtil{
                     if (rpow < 0.4){
                         rpow = 0.4;
                     }
+                    rpow = 0.5;
                     moveSideways_wCorrection("right",1,rpow,150);
                     setMotorToZeroPower();
-
+                    result = limelight.getLatestResult();
                     tx = result.getTx();
                 }
+
+                sleep(999999);
             }
         }
     }

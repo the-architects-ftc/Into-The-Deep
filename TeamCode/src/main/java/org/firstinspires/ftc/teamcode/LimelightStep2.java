@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 public class LimelightStep2 extends CommonUtil{
     //define limelight
     private Limelight3A limelight;
-    double thres = 0.0; //calibrate the limelight to find the perfect ta value for thes bc of new crosshair
+    double thres = 2.0; //calibrate the limelight to find the perfect ta value for thes bc of new crosshair
     double fpow = 0.0;
     double bpow = 0.0;
 
@@ -33,17 +33,19 @@ public class LimelightStep2 extends CommonUtil{
                 //get ta value
                 double ta = result.getTa();
                 //check if sample is far from the claw
-                while (ta - thres < 0){
-                    int time = 150;
+                while (Math.abs(ta - thres)>= 0.3){
+                    result = limelight.getLatestResult();
+                    ta = result.getTa();
+                    int time = 200;
                     //if too high make it 0.6
-                    fpow = Math.abs(ta - thres);
-                    if (fpow > 0.6) {
-                        fpow = 0.6;
+                    if (fpow > 0.4) {
+                        time += 70;
                     }
                     //if too low make it 0.2
                     if (fpow < 0.2) {
-                        fpow = 0.2;
+                        time -= 70;
                     }
+                    fpow = 0.35;
                     //set it to power
                     fl.setPower(fpow);
                     fr.setPower(fpow);
@@ -52,30 +54,44 @@ public class LimelightStep2 extends CommonUtil{
                     //sleep for time P.S. can also add or remove time in the if fpow statements
                     sleep(time);
                     setMotorToZeroPower();
+                    result = limelight.getLatestResult();
                     ta = result.getTa();
+                    sleep(750);
+                    telemetry.addData("Ta",ta);
+                    telemetry.update();
+
+
+                }
+                if (Math.abs(ta - thres)<= 0.5){
+                    telemetry.addData("Finished","Moving");
+                    telemetry.update();
+                    sleep(99999999);
+
                 }
 
-                while (ta - thres > 0.1){
-                    int time = 150;
-                    bpow = Math.abs(ta - thres);
-                    //if too high make it 0.6
-                    if (bpow > 0.6) {
-                        bpow = 0.6;
-                    }
-                    //if too low make it 0.2
-                    if (bpow < 0.2) {
-                        bpow = 0.2;
-                    }
-                    //set it to power
-                    fl.setPower(-bpow);
-                    fr.setPower(-bpow);
-                    bl.setPower(-bpow);
-                    br.setPower(-bpow);
-                    //sleep for time P.S. can also add or remove time in the if bpow statements
-                    sleep(time);
-                    setMotorToZeroPower();
-                    ta = result.getTa();
-                }
+
+
+//                while (ta - thres > 0.1){
+//                    int time = 150;
+//                    bpow = Math.abs(ta - thres);
+//                    //if too high make it 0.6
+//                    if (bpow > 0.6) {
+//                        bpow = 0.6;
+//                    }
+//                    //if too low make it 0.2
+//                    if (bpow < 0.2) {
+//                        bpow = 0.2;
+//                    }
+//                    //set it to power
+//                    fl.setPower(-bpow);
+//                    fr.setPower(-bpow);
+//                    bl.setPower(-bpow);
+//                    br.setPower(-bpow);
+//                    //sleep for time P.S. can also add or remove time in the if bpow statements
+//                    sleep(time);
+//                    setMotorToZeroPower();
+//                    ta = result.getTa();
+//                }
 
 
 
