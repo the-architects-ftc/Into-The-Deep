@@ -7,9 +7,11 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 public class LimelightStep3 extends CommonUtil{
     //define limelight
     private Limelight3A limelight;
-    double thresx = -14.5; //calibrate for threshold for tx
+    double thresx = -21; //calibrate for threshold for tx
     double lpow = 0.0;
     double rpow = 0.0;
+    double disin = 0;
+
     @Override
     public void runOpMode(){
         //motor setup
@@ -33,37 +35,48 @@ public class LimelightStep3 extends CommonUtil{
                 result = limelight.getLatestResult();
                 double tx = result.getTx();
 
-                while (tx - thresx < 0){
-
-                    lpow = Math.abs(tx-thresx);
-                    if (lpow > 0.6){
-                        lpow = 0.6;
-                    }
-                    if (lpow < 0.4){
-                        lpow = 0.4;
+                while (tx < thresx){
+                    telemetry.addData("Tx",tx);
+                    telemetry.update();
+                    disin = Math.abs(tx-thresx) * 1.7;
+                    if (disin < 0.7 ){
+                        telemetry.addData("Finished","Moving");
+                        telemetry.update();
+                        sleep(999999999);
                     }
                     lpow = 0.5;
-                    moveSideways_wCorrection("left",1,lpow,150);
+                    moveSideways_wCorrection("left",disin -1,0.7,2);
                     setMotorToZeroPower();
                     result = limelight.getLatestResult();
                     tx = result.getTx();
+                    telemetry.addData("Tx",tx);
+                    telemetry.update();
                 }
-                while (tx - thresx > 0.3){
-                    rpow = Math.abs(tx-thresx);
-                    if (rpow > 0.6){
-                        rpow = 0.6;
+                while (tx > 0.5 + thresx){
+                    telemetry.addData("Tx",tx);
+                    telemetry.update();
+                    disin = Math.abs(tx-thresx) * 1.7;
+                    if (disin < 0.7 ){
+                        telemetry.addData("Finished","Moving");
+                        telemetry.update();
+                        sleep(999999999);
                     }
-                    if (rpow < 0.4){
-                        rpow = 0.4;
-                    }
-                    rpow = 0.5;
-                    moveSideways_wCorrection("right",1,rpow,150);
+                    lpow = 0.5;
+                    moveSideways_wCorrection("right",disin + 0.5,lpow,1);
                     setMotorToZeroPower();
                     result = limelight.getLatestResult();
                     tx = result.getTx();
+                    telemetry.addData("Tx",tx);
+                    telemetry.update();
                 }
 
-                sleep(999999);
+                if (Math.abs(tx - thresx) <= 0.5) {
+                    moveForward_wDistance_wGyro(3,0.5,3);
+                    sleep(999999);
+                }
+            }
+            else{
+                moveSideways_wCorrection("left",disin +1,0.7,2);
             }
         }
     }

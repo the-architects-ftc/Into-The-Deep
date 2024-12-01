@@ -23,20 +23,32 @@ public class LimelightStep1 extends CommonUtil{
         limelight.pipelineSwitch(3);
         limelight.start();
         //wait for start
+        telemetry.addData("here","here");
+        telemetry.update();
         waitForStart();
 
         while (opModeIsActive()){
-            LLResult result = limelight.getLatestResult();
+
             //check if there is target and is detected
-            if (result != null && result.isValid()) {
-                //get tx value
-                double tx = result.getTx();
-                //check if it is on the right side
-                if (tx > 0) {
-                    //move it to the left
-                    moveSideways_wCorrection("right", 3, 0.7, 500);
+            telemetry.addData("here","here");
+            telemetry.update();
+            LLResult result = limelight.getLatestResult();
+
+            result = limelight.getLatestResult();
+            double tx = result.getTx();
+            //check if it is on the right side
+            while (tx > -15) { //was 0
+                result = limelight.getLatestResult();
+                tx = result.getTx();
+                telemetry.addData("here","here");
+                telemetry.update();
+                //move it to the left
+                moveSideways_wCorrection("right", 3, 0.7, 500);
+                result = limelight.getLatestResult();
+                tx = result.getTx();
                 }
+            sleep(99999);
             }
         }
     }
-}
+

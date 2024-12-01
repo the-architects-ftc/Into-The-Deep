@@ -7,9 +7,9 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 public class LimelightStep2 extends CommonUtil{
     //define limelight
     private Limelight3A limelight;
-    double thres = 2.0; //calibrate the limelight to find the perfect ta value for thes bc of new crosshair
-    double fpow = 0.0;
-    double bpow = 0.0;
+    double thres = 2.45; //calibrate the limelight to find the perfect ta value for thes bc of new crosshair
+
+    double disin = 0.0;
 
     @Override
     public void runOpMode(){
@@ -33,41 +33,62 @@ public class LimelightStep2 extends CommonUtil{
                 //get ta value
                 double ta = result.getTa();
                 //check if sample is far from the claw
-                while (Math.abs(ta - thres)>= 0.3){
-                    result = limelight.getLatestResult();
-                    ta = result.getTa();
-                    int time = 200;
-                    //if too high make it 0.6
-                    if (fpow > 0.4) {
-                        time += 70;
+                while (Math.abs(ta - thres)> 0.3){
+                    disin = Math.abs(ta-thres) * 2.5; //adjust the 2.5 to lower if u want it to move less and higher if u want it to move more
+                    telemetry.addData("disin",disin);
+                    telemetry.update();
+                    if (disin < 0.7 ){
+                        telemetry.addData("Finished","Moving");
+                        telemetry.update();
+                        sleep(999999999);
                     }
-                    //if too low make it 0.2
-                    if (fpow < 0.2) {
-                        time -= 70;
-                    }
-                    fpow = 0.35;
-                    //set it to power
-                    fl.setPower(fpow);
-                    fr.setPower(fpow);
-                    bl.setPower(fpow);
-                    br.setPower(fpow);
-                    //sleep for time P.S. can also add or remove time in the if fpow statements
-                    sleep(time);
+                    moveForward_wDistance_wGyro(disin + 12,0.7,1);
+                    setMotorToZeroPower();
+                    turn("right",1,1);
                     setMotorToZeroPower();
                     result = limelight.getLatestResult();
                     ta = result.getTa();
-                    sleep(750);
+                    if (Math.abs(ta - thres)<= 0.3){
+                        telemetry.addData("Finished","Moving");
+                        telemetry.update();
+                        sleep(99999999);
+
+                    }
+                    sleep(100);
                     telemetry.addData("Ta",ta);
                     telemetry.update();
-
-
                 }
-                if (Math.abs(ta - thres)<= 0.5){
+                result = limelight.getLatestResult();
+                ta = result.getTa();
+                if (Math.abs(ta - thres)<= 0.3){
                     telemetry.addData("Finished","Moving");
                     telemetry.update();
+
                     sleep(99999999);
 
                 }
+                result = limelight.getLatestResult();
+                ta = result.getTa();
+//                while (ta-thres > 0.3){
+//                    disin = Math.abs(ta-thres) * 2.5; //adjust the 2.5 to lower if u want it to move less and higher if u want it to move more
+//                    moveBackwards_wDistance_wGyro(38,0.7,3);
+//                    setMotorToZeroPower();
+//                    result = limelight.getLatestResult();
+//                    ta = result.getTa();
+//                    sleep(100);
+//                    telemetry.addData("Ta",ta);
+//                    telemetry.update();
+//
+
+
+
+//                }
+//                if (Math.abs(ta - thres)<= 0.3){
+//                    telemetry.addData("Finished","Moving");
+//                    telemetry.update();
+//                    sleep(99999999);
+
+//                }
 
 
 

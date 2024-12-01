@@ -282,7 +282,7 @@ public class CommonUtil extends LinearOpMode {
             telemetry.addData("movePause", movePause);
             telemetry.update();
 
-            bl.setPower(power - correction);
+            bl.setPower(power - correction); //was power for the bottom few
             fl.setPower(power - correction);
             fr.setPower(power - correction);
             br.setPower(power - correction);
@@ -482,7 +482,7 @@ public class CommonUtil extends LinearOpMode {
     }
 
 
-    public void moveSideways_wCorrection(String direction, int DistanceAbsIn, double motorAbsPower,int timeToStop)
+    public void moveSideways_wCorrection(String direction, double DistanceAbsIn, double motorAbsPower,int timeToStop)
     {
         ElapsedTime runtime= new ElapsedTime();
         //turnToZeroAngle();
