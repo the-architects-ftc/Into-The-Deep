@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 public class LimelightStep3 extends CommonUtil{
     //define limelight
     private Limelight3A limelight;
-    double thresx = -21; //calibrate for threshold for tx
+    double thresx = -0.8; //calibrate for threshold for tx
     double lpow = 0.0;
     double rpow = 0.0;
     double disin = 0;

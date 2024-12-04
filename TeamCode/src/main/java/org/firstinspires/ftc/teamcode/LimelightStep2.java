@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 public class LimelightStep2 extends CommonUtil{
     //define limelight
     private Limelight3A limelight;
-    double thres = 2.45; //calibrate the limelight to find the perfect ta value for thes bc of new crosshair
+    double thres = 4.15; //calibrate the limelight to find the perfect ta value for thes bc of new crosshair
 
     double disin = 0.0;
 
@@ -28,25 +28,29 @@ public class LimelightStep2 extends CommonUtil{
 
         while (opModeIsActive()){
             LLResult result = limelight.getLatestResult();
+
             //check if there is target and is detected
             if (result != null && result.isValid()) {
                 //get ta value
                 double ta = result.getTa();
+                double oldta = ta;
                 //check if sample is far from the claw
                 while (Math.abs(ta - thres)> 0.3){
                     disin = Math.abs(ta-thres) * 2.5; //adjust the 2.5 to lower if u want it to move less and higher if u want it to move more
                     telemetry.addData("disin",disin);
                     telemetry.update();
-                    if (disin < 0.7 ){
+                    if (disin < 1 ){
                         telemetry.addData("Finished","Moving");
                         telemetry.update();
+
                         sleep(999999999);
                     }
-                    moveForward_wDistance_wGyro(disin + 12,0.7,1);
+                    moveForward_wDistance_wGyro(disin + 8,0.6,1);
                     setMotorToZeroPower();
                     turn("right",1,1);
                     setMotorToZeroPower();
                     result = limelight.getLatestResult();
+                    oldta = ta;
                     ta = result.getTa();
                     if (Math.abs(ta - thres)<= 0.3){
                         telemetry.addData("Finished","Moving");
@@ -54,13 +58,20 @@ public class LimelightStep2 extends CommonUtil{
                         sleep(99999999);
 
                     }
+
+                    if (Math.abs(ta - oldta) <= 0.1){
+                        sleep(99999999);
+                    }
                     sleep(100);
                     telemetry.addData("Ta",ta);
                     telemetry.update();
                 }
                 result = limelight.getLatestResult();
+                oldta = ta;
                 ta = result.getTa();
                 if (Math.abs(ta - thres)<= 0.3){
+
+                    turn("right",5,1);
                     telemetry.addData("Finished","Moving");
                     telemetry.update();
 
@@ -68,6 +79,7 @@ public class LimelightStep2 extends CommonUtil{
 
                 }
                 result = limelight.getLatestResult();
+                oldta = ta;
                 ta = result.getTa();
 //                while (ta-thres > 0.3){
 //                    disin = Math.abs(ta-thres) * 2.5; //adjust the 2.5 to lower if u want it to move less and higher if u want it to move more
