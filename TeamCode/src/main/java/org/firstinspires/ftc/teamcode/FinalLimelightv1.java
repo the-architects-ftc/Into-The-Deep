@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 
 @Autonomous(name = "FinalLimelight", group = "Limelight")
-public class FinalLimelight extends CommonUtil {
+public class FinalLimelightv1 extends CommonUtil {
     //define limelight
     private Limelight3A limelight;
     double thres = 4.15; //calibrate the limelight to find the perfect ta value for thes bc of new crosshair
@@ -20,7 +20,7 @@ public class FinalLimelight extends CommonUtil {
     public void runOpMode() {
         initialize(hardwareMap);
         setMotorOrientation();
-        limelight = hardwareMap.get(Limelight3A.class, "limelight");
+        limelight = hardwareMap.get(Limelight3A.class, "org/firstinspires/ftc/teamcode/limelight");
         limelight.setPollRateHz(100);
         telemetry.setMsTransmissionInterval(11);
         telemetry.update();

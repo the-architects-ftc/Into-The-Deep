@@ -16,7 +16,7 @@ public class LimelightStep1 extends CommonUtil {
         initialize(hardwareMap);
         setMotorOrientation();
         //limelight setup
-        limelight = hardwareMap.get(Limelight3A.class, "limelight");
+        limelight = hardwareMap.get(Limelight3A.class, "org/firstinspires/ftc/teamcode/limelight");
         limelight.setPollRateHz(100);
         telemetry.setMsTransmissionInterval(11);
         telemetry.update();

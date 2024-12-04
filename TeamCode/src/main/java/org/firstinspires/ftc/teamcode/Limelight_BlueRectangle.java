@@ -1,16 +1,10 @@
 package org.firstinspires.ftc.teamcode;
 
 
-import com.acmerobotics.dashboard.FtcDashboard;
 import com.qualcomm.hardware.limelightvision.LLResult;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.hardware.limelightvision.LLResultTypes;
-import com.acmerobotics.dashboard.FtcDashboard;
-import com.acmerobotics.dashboard.config.Config;
-import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+
 @Autonomous(name = "Limelight_BlueRectangle", group = "Limelight")
 public class Limelight_BlueRectangle extends CommonUtil{
 
@@ -25,7 +19,7 @@ public class Limelight_BlueRectangle extends CommonUtil{
         //Initialize Hardware
         initialize(hardwareMap);
         setMotorOrientation();
-        limelight = hardwareMap.get(Limelight3A.class,"limelight");
+        limelight = hardwareMap.get(Limelight3A.class, "limelight");
         limelight.setPollRateHz(100);
         telemetry.setMsTransmissionInterval(11);
         telemetry.update();
