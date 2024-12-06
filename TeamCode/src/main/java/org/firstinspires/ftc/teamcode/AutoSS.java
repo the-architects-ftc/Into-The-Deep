@@ -31,27 +31,14 @@ package org.firstinspires.ftc.teamcode;
 
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
+import com.qualcomm.hardware.limelightvision.LLResult;
+import com.qualcomm.hardware.limelightvision.Limelight3A;
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
-
-/**
- * This file contains an minimal example of a Linear "OpMode". An OpMode is a 'program' that runs in either
- * the autonomous or the teleop period of an FTC match. The names of OpModes appear on the menu
- * of the FTC Driver Station. When a selection is made from the menu, the corresponding OpMode
- * class is instantiated on the Robot Controller and executed.
-
- * This particular OpMode just executes a basic Tank Drive Teleop for a two wheeled robot
- * It includes all the skeletal structure that all linear OpModes contain.
-
- * Use Android Studio to Copy this Class, and Paste it into your team's code folder with a new name.
- * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
- */
-
-
-@Autonomous(name="Unit_Test", group="Linear Opmode2")
-public class Unit_Test extends CommonUtil {
+@Autonomous(name="AutoSS", group="Linear Opmode2")
+public class AutoSS extends CommonUtil {
 
     Orientation myRobotOrientation;
 
@@ -61,68 +48,29 @@ public class Unit_Test extends CommonUtil {
         //setup
         telemetry.setAutoClear(false);
         // initialize hardware
-
         initialize(hardwareMap);
         // Initialize motors
         setMotorOrientation();
         //resetMotorEncoderCounts();
         setMotorToZeroPower();
-        setZeroPowerBehavior();
+        resetMotorEncoderCounts();
+        imu.resetYaw();
+        clawOpen();
 
 
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
 
         while (opModeIsActive()) {
-            clawOpen();
-            sleep(1000);
-            clawClose();
-
-//            moveBackwards_wDistance_wGyro(25,0.3);
-//
-//
-//            moveForward_wDistance_wGyro(3,0.3);
-//            sleep(500);
-//
-//            telemetry.addData("trying to move sideways","starting");
-//            telemetry.update();
-//            moveSideways_wCorrection("left",6,1);
-//            telemetry.addData("trying to move sideways","complete");
-//            telemetry.update();
-//            sleep(500);
-//
-//
-//            turn("left",90);
-//            sleep(100);
-//
-//            moveForward_wDistance_wGyro(8,0.3);
-//            sleep(100);
-//
-//
-//
-//            moveBackwards_wDistance_wGyro(8,0.3);
-//            sleep(100);
-//
-//
-//
-//            turn("right",90);
-//            sleep(100);
-//
-//            moveSideways_wCorrection("right",6,1);
-//            sleep(100);
-
-            //sleep(2000);
-            //setMotorToZeroPower();
-            //sleep(2000);
-
-
-            //sleep(2000);
-            //setMotorToZeroPower();
-
-
-
-
-         sleep(9000000);
+            moveForward_wDistance_wGyro(29,1,5);
+            turn("left",7,2);
+            sleep(500);
+            slideUp(1,2300,15);
+            sleep(100);
+            moveForward_wDistance_wGyro(10,1,3);
+            sleep(500);
+            slideDown(1,1700,15);
+            sleep(9000000);
 
         }
     }

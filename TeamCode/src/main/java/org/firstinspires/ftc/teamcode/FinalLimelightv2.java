@@ -3,10 +3,12 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.hardware.limelightvision.LLResult;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-
-
-@Autonomous(name = "FinalLimelight", group = "Limelight")
-public class FinalLimelightv1 extends CommonUtil {
+//fix moving forward
+//add ftc dashboard
+//make stuff move faster
+//add claw
+@Autonomous(name = "FinalLimelightv2", group = "Limelight")
+public class FinalLimelightv2 extends CommonUtil {
     //define limelight
     private Limelight3A limelight;
     double thres = 4.15; //calibrate the limelight to find the perfect ta value for thes bc of new crosshair
@@ -118,39 +120,39 @@ public class FinalLimelightv1 extends CommonUtil {
                     result = limelight.getLatestResult();
                     oldta = ta;
                     ta = result.getTa();
-                    }
-                    moveForward_wDistance_wGyro(disin + 8,0.6,1);
-                    setMotorToZeroPower();
-                    turn("right",1,1);
-                    setMotorToZeroPower();
-                    result = limelight.getLatestResult();
-                    oldta = ta;
-                    ta = result.getTa();
-                    if (Math.abs(ta - thres)<= 0.3){
-                        telemetry.addData("Finished","Moving");
-                        telemetry.update();
-                        moveSideways_wCorrection("right", 3.6, 0.8, 5);
-                        moveSideways_wCorrection("right", 3.6, 0.8, 5);
-                        moveForward_wDistance_wGyro(6.5,0.5,1);
-                        sleep(99999);
-
-                    }
-
-                    if (Math.abs(ta - oldta) <= 0.1){
-                        moveSideways_wCorrection("right", 3.6, 0.8, 5);
-                        moveSideways_wCorrection("right", 3.6, 0.8, 5);
-                        moveForward_wDistance_wGyro(6.5,0.5,1);
-                        sleep(99999);
-                    }
-                    result = limelight.getLatestResult();
-                    oldta = ta;
-                    ta = result.getTa();
-
-
-                        }
+                }
+                moveForward_wDistance_wGyro(disin + 8,0.6,1);
+                setMotorToZeroPower();
+                turn("right",1,1);
+                setMotorToZeroPower();
+                result = limelight.getLatestResult();
+                oldta = ta;
+                ta = result.getTa();
+                if (Math.abs(ta - thres)<= 0.3){
+                    telemetry.addData("Finished","Moving");
+                    telemetry.update();
+                    moveSideways_wCorrection("right", 3.6, 0.8, 5);
+                    moveSideways_wCorrection("right", 3.6, 0.8, 5);
+                    moveForward_wDistance_wGyro(6.5,0.5,1);
+                    sleep(99999);
 
                 }
+
+                if (Math.abs(ta - oldta) <= 0.1){
+                    moveSideways_wCorrection("right", 3.6, 0.8, 5);
+                    moveSideways_wCorrection("right", 3.6, 0.8, 5);
+                    moveForward_wDistance_wGyro(6.5,0.5,1);
+                    sleep(99999);
+                }
+                result = limelight.getLatestResult();
+                oldta = ta;
+                ta = result.getTa();
+
+
             }
+
         }
+    }
+}
 
 

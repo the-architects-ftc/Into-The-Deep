@@ -56,6 +56,8 @@ public class CommonUtil extends LinearOpMode {
     Servo s5 = null;
     Servo s6 = null;
     Servo s12 = null;
+    Servo lc = null;
+    Servo rc = null;
 
     CRServo s4 = null;
 
@@ -96,6 +98,8 @@ public class CommonUtil extends LinearOpMode {
         s5 = hardwareMap.get(Servo.class,"s5");
         s6 = hardwareMap.get(Servo.class,"s6");
         s12 = hardwareMap.get(Servo.class,"s12");
+        lc = hardwareMap.get(Servo.class,"leftclaw");
+        rc = hardwareMap.get(Servo.class,"rightclaw");
         s1.setDirection(Servo.Direction.FORWARD);
         s2.setDirection(Servo.Direction.FORWARD);
         s3.setDirection(Servo.Direction.REVERSE);
@@ -125,6 +129,42 @@ public class CommonUtil extends LinearOpMode {
 
 
     }
+
+    public void weirdturn(){
+        fl.setPower(0);
+        fr.setPower(1);
+        bl.setPower(-1);
+        br.setPower(1);
+        sleep(400);
+        fl.setPower(0);
+        fr.setPower(0);
+        bl.setPower(0);
+        br.setPower(0);
+    }
+
+    public void wierdforward(int time){
+        fl.setPower(0.8);
+        fr.setPower(0.8);
+        bl.setPower(0.8);
+        br.setPower(0.8);
+        sleep(time);
+        fl.setPower(0);
+        fr.setPower(0);
+        bl.setPower(0);
+        br.setPower(0);
+    }
+    public void wierdbackward(int time){
+        fl.setPower(-0.8);
+        fr.setPower(-0.8);
+        bl.setPower(-0.8);
+        br.setPower(-0.8);
+        sleep(time);
+        fl.setPower(-0);
+        fr.setPower(-0);
+        bl.setPower(-0);
+        br.setPower(-0);
+    }
+
 
     //reset encoder counts
     public void resetMotorEncoderCounts()
@@ -159,6 +199,7 @@ public class CommonUtil extends LinearOpMode {
         br.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         fr.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
     }
+
 
     public void intakeOn(){
         s4.setPower(1);
@@ -200,10 +241,18 @@ public class CommonUtil extends LinearOpMode {
         s12.setPosition(0.5);
 
     }
-    public void clawOpen() { s5.setDirection(Servo.Direction.FORWARD);
-        s5.setPosition(1); }
-    public void clawClose() { s5.setDirection(Servo.Direction.REVERSE);
-        s5.setPosition(1); }
+    public void clawOpen() {
+        rc.setDirection(Servo.Direction.FORWARD);
+        lc.setDirection(Servo.Direction.REVERSE);
+        rc.setPosition(1);
+        lc.setPosition(1);
+    }
+    public void clawClose() {
+        rc.setDirection(Servo.Direction.FORWARD);
+        lc.setDirection(Servo.Direction.REVERSE);
+        rc.setPosition(0);
+        lc.setPosition(0);
+    }
     public void basketUp() { s3.setDirection(Servo.Direction.FORWARD);
         s3.setPosition(0.25); }
     public void basketDown() { s3.setDirection(Servo.Direction.FORWARD);

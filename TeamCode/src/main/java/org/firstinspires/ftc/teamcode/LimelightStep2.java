@@ -17,11 +17,11 @@ public class LimelightStep2 extends CommonUtil{
         initialize(hardwareMap);
         setMotorOrientation();
         //limelight setup
-        limelight = hardwareMap.get(Limelight3A.class, "org/firstinspires/ftc/teamcode/limelight");
+        limelight = hardwareMap.get(Limelight3A.class, "limelight");
         limelight.setPollRateHz(100);
         telemetry.setMsTransmissionInterval(11);
         telemetry.update();
-        limelight.pipelineSwitch(3);
+        limelight.pipelineSwitch(4); //was 3
         limelight.start();
         //wait for start
         waitForStart();
@@ -39,13 +39,13 @@ public class LimelightStep2 extends CommonUtil{
                     disin = Math.abs(ta-thres) * 2.5; //adjust the 2.5 to lower if u want it to move less and higher if u want it to move more
                     telemetry.addData("disin",disin);
                     telemetry.update();
-                    if (disin < 1 ){
-                        telemetry.addData("Finished","Moving");
+                    if (disin < 1.4 ){ //was 1
+                        telemetry.addData("in","Moving");
                         telemetry.update();
 
                         sleep(999999999);
                     }
-                    moveForward_wDistance_wGyro(disin + 8,0.6,1);
+                    moveForward_wDistance_wGyro(disin + 8,1,1); //was 0.7
                     setMotorToZeroPower();
                     turn("right",1,1);
                     setMotorToZeroPower();
@@ -59,11 +59,13 @@ public class LimelightStep2 extends CommonUtil{
 
                     }
 
-                    if (Math.abs(ta - oldta) <= 0.1){
+                    if (Math.abs(ta - oldta) <= 0.07){ //was 0.1
+                        telemetry.addData("inta","loop");
+                        telemetry.update();
                         sleep(99999999);
                     }
                     sleep(100);
-                    telemetry.addData("Ta",ta);
+                    telemetry.addData("disin",disin);
                     telemetry.update();
                 }
                 result = limelight.getLatestResult();
@@ -81,50 +83,6 @@ public class LimelightStep2 extends CommonUtil{
                 result = limelight.getLatestResult();
                 oldta = ta;
                 ta = result.getTa();
-//                while (ta-thres > 0.3){
-//                    disin = Math.abs(ta-thres) * 2.5; //adjust the 2.5 to lower if u want it to move less and higher if u want it to move more
-//                    moveBackwards_wDistance_wGyro(38,0.7,3);
-//                    setMotorToZeroPower();
-//                    result = limelight.getLatestResult();
-//                    ta = result.getTa();
-//                    sleep(100);
-//                    telemetry.addData("Ta",ta);
-//                    telemetry.update();
-//
-
-
-
-//                }
-//                if (Math.abs(ta - thres)<= 0.3){
-//                    telemetry.addData("Finished","Moving");
-//                    telemetry.update();
-//                    sleep(99999999);
-
-//                }
-
-
-
-//                while (ta - thres > 0.1){
-//                    int time = 150;
-//                    bpow = Math.abs(ta - thres);
-//                    //if too high make it 0.6
-//                    if (bpow > 0.6) {
-//                        bpow = 0.6;
-//                    }
-//                    //if too low make it 0.2
-//                    if (bpow < 0.2) {
-//                        bpow = 0.2;
-//                    }
-//                    //set it to power
-//                    fl.setPower(-bpow);
-//                    fr.setPower(-bpow);
-//                    bl.setPower(-bpow);
-//                    br.setPower(-bpow);
-//                    //sleep for time P.S. can also add or remove time in the if bpow statements
-//                    sleep(time);
-//                    setMotorToZeroPower();
-//                    ta = result.getTa();
-//                }
 
 
 
