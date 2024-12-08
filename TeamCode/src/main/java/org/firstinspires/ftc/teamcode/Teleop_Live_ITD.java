@@ -31,6 +31,8 @@ public class Teleop_Live_ITD extends LinearOpMode {
     Servo s1 = null;
     Servo s2 = null;
     Servo s3 = null;
+    Servo lc = null;
+    Servo rc = null;
     float left1Y, right1Y,left1X,right1X;
     float left2Y, right2Y, left2X, right2X;
     boolean flag_correction = true;
@@ -85,6 +87,10 @@ public class Teleop_Live_ITD extends LinearOpMode {
         s1.setDirection(Servo.Direction.FORWARD);
         s2.setDirection(Servo.Direction.FORWARD);
         s3.setDirection(Servo.Direction.REVERSE);
+        lc = hardwareMap.get(Servo.class,"leftclaw");
+        rc = hardwareMap.get(Servo.class,"rightclaw");
+        rc.setDirection(Servo.Direction.FORWARD);
+        lc.setDirection(Servo.Direction.REVERSE);
 
 
 
@@ -140,6 +146,14 @@ public class Teleop_Live_ITD extends LinearOpMode {
                m2.setPower(0);
 
 
+            }
+            if (gamepad2.a) { //claw close
+                rc.setPosition(1);
+                lc.setPosition(1);
+            }
+            if (gamepad2.y){ //claw open
+                rc.setPosition(0);
+                lc.setPosition(0);
             }
 
 
