@@ -26,9 +26,10 @@ public class Teleop_live_2controllers extends LinearOpMode {
     DcMotor fr = null;
     DcMotor br = null;
     DcMotor m0 = null;
-    DcMotor m1 = null;
+
     DcMotor m2 = null;
     DcMotor m3 = null;
+    DcMotor la = null;
     Servo s1 = null;
     Servo s2 = null;
     Servo s3 = null;
@@ -86,6 +87,7 @@ public class Teleop_live_2controllers extends LinearOpMode {
         fl = hardwareMap.get(DcMotor.class, "LF");
         fr = hardwareMap.get(DcMotor.class, "RF");
         br = hardwareMap.get(DcMotor.class, "RB");
+        la = hardwareMap.dcMotor.get("LA");
         bl.setDirection(DcMotor.Direction.REVERSE);
         fl.setDirection(DcMotor.Direction.REVERSE);
         fr.setDirection(DcMotor.Direction.FORWARD);
@@ -102,7 +104,7 @@ public class Teleop_live_2controllers extends LinearOpMode {
         br.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         m0 = hardwareMap.get(DcMotor.class, "M0");
-        m1 = hardwareMap.get(DcMotor.class, "M1");
+
         m2 = hardwareMap.get(DcMotor.class, "M2");
         m3 = hardwareMap.get(DcMotor.class, "M3");
         s1 = hardwareMap.get(Servo.class, "s1");
@@ -119,7 +121,7 @@ public class Teleop_live_2controllers extends LinearOpMode {
         fl.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         fr.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         br.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        m1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
         m2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         m3.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
@@ -202,10 +204,15 @@ public class Teleop_live_2controllers extends LinearOpMode {
                     s6.setPosition(0.5);
                 }
 
-
+                if (gamepad1.dpad_up) {
+                    la.setPower(-1);
+                }
+                la.setPower(0);
                 if (gamepad1.y) {
 
+                    la.setPower(1);
                 }
+                la.setPower(0);
 
 
                 //specimen claw servo
