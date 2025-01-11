@@ -31,8 +31,32 @@ package org.firstinspires.ftc.teamcode;
 
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.hardware.DcMotorController;
+import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
+import com.qualcomm.robotcore.hardware.CRServo;
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.hardware.bosch.BHI260IMU;
+import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.IMU;
+import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.util.ElapsedTime;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
+
+
+
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
+import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
+import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 
 
 /**
@@ -49,10 +73,11 @@ import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
  */
 
 
-@Autonomous(name="Eesha_New_Code", group="Linear Opmode2")
-public class Eesha_New_Code extends CommonUtil {
+@Autonomous(name="actuator", group="Linear Opmode2")
+public class actuatortestwork extends CommonUtil {
 
     Orientation myRobotOrientation;
+    DcMotor la = null;
 
     @Override
     public void runOpMode() {
@@ -60,18 +85,49 @@ public class Eesha_New_Code extends CommonUtil {
         //setup
         telemetry.setAutoClear(false);
         // initialize hardware
+
         initialize(hardwareMap);
         // Initialize motors
         setMotorOrientation();
-        //resetMotorEncoderCounts();
+        resetMotorEncoderCounts();
         setMotorToZeroPower();
-//        clawClosed();
-//        wristFlat();
+        setZeroPowerBehavior();
 
+
+
+        la = hardwareMap.dcMotor.get("LA");
+
+        bl.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
 
         while (opModeIsActive()) {
+
+            la.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            la.setTargetPosition(13500);
+            la.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            la.setPower(1);
+            while (la.isBusy()){
+
+            }
+            la.setPower(0);
+            la.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+            la.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            la.setTargetPosition(-13500);
+            la.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            la.setPower(-1);
+            while (la.isBusy()){
+
+            }
+            la.setPower(0);
+            la.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+
+
+
+
+            sleep(9000000);
 
         }
     }

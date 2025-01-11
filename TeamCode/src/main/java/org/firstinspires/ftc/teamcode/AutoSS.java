@@ -61,15 +61,16 @@ public class AutoSS extends CommonUtil {
         waitForStart();
 
         while (opModeIsActive()) {
-            wierdforward(434); //was 425
-            slideUp(1,2300,4);
-            clawClose();
-            sleep(100);
+            wierdforward(380); //was 447
+//            slideUp(1,1000,3);
+            wierdslideup(945);
             wierdforward(84);
-            slideDown(0.5,965,10);
+//            slideDown(0.5,600,3);
+            wierdslidedown(180);
             clawOpen();
             wierdbackward(125);
-            slideDown(1,1430,4);
+            wierdslidedown(900);
+
 
             sleep(9000000);
 
