@@ -65,8 +65,8 @@ public class Auto_Ozone extends CommonUtil {
         setMotorOrientation();
         //resetMotorEncoderCounts();
         setMotorToZeroPower();
-//        clawClosed();
-//        wristFlat();
+        clawClosed();
+        wristFlat();
 
         // Wait for the game to start (driver presses PLAY)
         waitForStart();

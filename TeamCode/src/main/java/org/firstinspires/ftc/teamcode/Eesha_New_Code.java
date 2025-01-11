@@ -65,14 +65,14 @@ public class Eesha_New_Code extends CommonUtil {
         setMotorOrientation();
         //resetMotorEncoderCounts();
         setMotorToZeroPower();
-//        clawClosed();
-//        wristFlat();
+        clawClosed();
+        wristFlat();
 
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
 
         while (opModeIsActive()) {
-
+            m0.setPower(0.2);
         }
     }
 
