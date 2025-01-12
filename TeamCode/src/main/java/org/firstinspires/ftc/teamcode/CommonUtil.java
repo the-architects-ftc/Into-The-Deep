@@ -58,7 +58,7 @@ public class CommonUtil extends LinearOpMode {
     Servo lc = null;
     Servo rc = null;
 
-    CRServo s4 = null;
+    Servo s4 = null;
 
     //All Our functions!
 
@@ -87,18 +87,17 @@ public class CommonUtil extends LinearOpMode {
         br = hardwareMap.get(DcMotor.class, "RB");
 
 
-        m2 = hardwareMap.get(DcMotor.class, "M2");
+        m2 = hardwareMap.get(DcMotor.class, "lSlide");
 
 
 
-        s3 = hardwareMap.get(Servo.class, "s3");
-        s3 = hardwareMap.get(Servo.class, "s3");
-        s4 = hardwareMap.get(CRServo.class, "s4");
+        s3 = hardwareMap.get(Servo.class, "BOP");
+        s4 = hardwareMap.get(Servo.class, "iWheel");
 
-        s2 = hardwareMap.get(Servo.class,"s2");
-        s5 = hardwareMap.get(Servo.class,"s5");
-        lc = hardwareMap.get(Servo.class,"leftclaw");
-        rc = hardwareMap.get(Servo.class,"rightclaw");
+        s2 = hardwareMap.get(Servo.class,"iElbow");
+        s5 = hardwareMap.get(Servo.class,"iWrist");
+        lc = hardwareMap.get(Servo.class,"ClawL");
+        rc = hardwareMap.get(Servo.class,"ClawR");
 
 
         s3.setDirection(Servo.Direction.REVERSE);
@@ -145,14 +144,15 @@ public class CommonUtil extends LinearOpMode {
         fl.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         fr.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         br.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        bl.setDirection(DcMotor.Direction.FORWARD);
-        fl.setDirection(DcMotor.Direction.FORWARD);
-        fr.setDirection(DcMotor.Direction.FORWARD);
-        br.setDirection(DcMotor.Direction.FORWARD);
-        fl.setPower(0.8);
-        fr.setPower(0.8);
-        bl.setPower(0.8);
-        br.setPower(0.8);
+//        bl.setDirection(DcMotor.Direction.FORWARD);
+//        fl.setDirection(DcMotor.Direction.FORWARD);
+//        fr.setDirection(DcMotor.Direction.FORWARD);
+//        br.setDirection(DcMotor.Direction.FORWARD);
+        br.setPower(0.9);
+        fl.setPower(0.7);
+        fr.setPower(0.7);
+        bl.setPower(0.7);
+
         sleep(time);
         fl.setPower(0);
         fr.setPower(0);
@@ -224,15 +224,15 @@ public class CommonUtil extends LinearOpMode {
     }
 
 
-    public void intakeOn(){
-        s4.setPower(1);
-    }
-    public void intakeReverse(){
-        s4.setPower(-1);
-    }
-    public void intakeOff(){
-        s4.setPower(0);
-    }
+//    public void intakeOn(){
+//        s4.setPower(1);
+//    }
+//    public void intakeReverse(){
+//        s4.setPower(-1);
+//    }
+//    public void intakeOff(){
+//        s4.setPower(0);
+//    }
     public void armUp() {
         s5.setPosition(0.5);
         s2.setPosition(0.5);
@@ -671,7 +671,7 @@ public class CommonUtil extends LinearOpMode {
 
     public void slideUp(double power, int encoderAbsCounts,int timeToStop) {
         ElapsedTime runtime = new ElapsedTime();
-        m2.setDirection(DcMotor.Direction.FORWARD);
+        m2.setDirection(DcMotor.Direction.REVERSE);
         m2.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         m2.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         telemetry.addData("Start count", m2.getCurrentPosition());
