@@ -32,14 +32,14 @@ public class OdometryTest extends LinearOpMode {
         frontRight.setDirection(DcMotor.Direction.FORWARD);
         backRight.setDirection(DcMotor.Direction.FORWARD);
 
-        frontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        frontLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        backRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        backRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         waitForStart();
 
         while (opModeIsActive()) {
             // Read and display the digital input value
-            telemetry.addData("Odometry Reading", frontLeft.getCurrentPosition());
+            telemetry.addData("Odometry Reading", backRight.getCurrentPosition());
             telemetry.update();
 
             // Short sleep to prevent overwhelming the telemetry

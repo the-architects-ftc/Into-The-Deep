@@ -69,6 +69,7 @@ public class MecanumPurePursuitController {
                 Math.max(Math.abs(backLeftPower), Math.abs(backRightPower))
         );
 
+
         if (maxPower > 1.0) {
             frontLeftPower /= maxPower;
             frontRightPower /= maxPower;

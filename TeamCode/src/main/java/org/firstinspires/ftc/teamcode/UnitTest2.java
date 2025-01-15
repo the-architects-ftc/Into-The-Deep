@@ -77,6 +77,18 @@ public class UnitTest2 extends LinearOpMode {
 
     double ENC2DIST = 2000.0/3.9558976; //2000.0/48.0; // FW/BW
     double ENC2DIST_SIDEWAYS = 2000.0/3.9558976;
+
+    double kpX = 0.0001;
+    double kpY = 0.0001;
+    double kdx = 0.0018;
+    double kdy = 0.0018;
+
+    double startXTracker = 0.0;
+    double startYTracker = 0.0;
+
+    double current_X = 0;
+    double current_Y = 0;
+
     ElapsedTime timer = new ElapsedTime();
 
     //imu init
@@ -118,6 +130,9 @@ public class UnitTest2 extends LinearOpMode {
         bl.setDirection(DcMotorSimple.Direction.REVERSE);
         fl.setDirection(DcMotorSimple.Direction.REVERSE);
 
+        resetMotorEncoderCounts();
+
+
         //setup
         telemetry.setAutoClear(false);
         // initialize hardware
@@ -127,21 +142,13 @@ public class UnitTest2 extends LinearOpMode {
         waitForStart();
 
         while (opModeIsActive()) {
-            moveForward_wDistance_wGyro(60,0.3);
-            sleep(2000);
 
-            moveBackwards_wDistance_wGyro(60,0.3);
-            sleep(2000);
+            moveDS(startXTracker,startYTracker,40.0,20.0,0.5);
 
-            //turn("right", 90);
-            //sleep(2000);
+//            moveDS(startXTracker,startYTracker,40,20.0,0.5);
 
-            //turn("left", 90);
-            //sleep(2000);
-            //eesha is epicer than aarush NO
-//
-
-
+//            moveDS(0.0,0.0,0.0,20.0,0.5);
+//            moveDS(0.0,20.0,40.0,20.0,0.5);
 
             sleep(9000000);
 
@@ -161,7 +168,7 @@ public class UnitTest2 extends LinearOpMode {
         // map imu
         imu = hardwareMap.get(BHI260IMU.class,"imu");
         myIMUParameters = new IMU.Parameters(
-                new RevHubOrientationOnRobot(RevHubOrientationOnRobot.LogoFacingDirection.UP,RevHubOrientationOnRobot.UsbFacingDirection.FORWARD )
+                new RevHubOrientationOnRobot(RevHubOrientationOnRobot.LogoFacingDirection.UP,RevHubOrientationOnRobot.UsbFacingDirection.BACKWARD )
         );
         imu.initialize(myIMUParameters);
         imu.resetYaw();
@@ -180,7 +187,7 @@ public class UnitTest2 extends LinearOpMode {
 
     public double PID_Turn (double targetAngle, double currentAngle, String minPower) {
         double sign = 1;
-        double power = (targetAngle - currentAngle) * 0.015; // was 0.05
+        double power = (targetAngle - currentAngle) * 0.035; // was 0.05
         if (minPower.equalsIgnoreCase("on")&& (power != 0)) {
             sign = Math.signum(power);
             power = Math.max(Math.abs(power), 0.1);
@@ -189,23 +196,210 @@ public class UnitTest2 extends LinearOpMode {
         return power;
     }
 
-    public double PID_FB (double targetEC, double currentEC,double MPower)
+    public double[] PID_FB (double targetEC, double currentEC,double prevErrorEC,double MPower)
     {
-        double power = (targetEC -currentEC)*0.0001;
-        if (power < 0)
+        double errorEC = targetEC - currentEC;
+        double pTerm = errorEC * 0.0001;
+        double dTerm = (errorEC - prevErrorEC) * 0.0018;
+        double power = pTerm + dTerm;
+        telemetry.addData("pTerm",pTerm);
+        telemetry.addData("dterm",dTerm);
+
+        if ( power < 0)
         {
             power = 0;
-        }
-        //else if (power < 0.1)
-        //{
-           // power = 0.1;
-        //}
-        if (power > MPower){
+        }else if (power < 0.07){
+            power = 0;
+        }else if (power > MPower){
             power = MPower;
+
         }
 
-        return power;
+        return new double[]{power, errorEC,pTerm,dTerm};
+
     }
+
+
+    public double[] PID_DS (double targetX, double currentX, double targetY, double currentY,double prevErrorX,double prevErrorY,double Mpower,double prevMaxPower)
+    {
+        // Calculate X power
+        double errorX = targetX - currentX;
+        double pTermX = errorX * 0.0001; // 0.00015
+        double dTermX = (errorX - prevErrorX) * 0.0006; // 0.0006
+        double powerX = pTermX + dTermX;
+        if(Math.abs(errorX) < 200){
+            powerX = 0;
+        }
+        // Calculate Y power
+        double errorY = targetY - currentY;
+        double pTermY = errorY * 0.0001;
+        double dTermY = (errorY - prevErrorY) * 0.0008;
+        double powerY = pTermY + dTermY;
+        if(Math.abs(errorY) < 200){
+            powerY = 0;
+        }
+        // Calculate power to all motors
+        double frontLeftPower = powerY + powerX ; //1 "+" and "-" were reversed to correct strafe directions
+        double frontRightPower = powerY - powerX; //-1
+        double backLeftPower = powerY - powerX; //-1
+        double backRightPower = powerY + powerX;//1
+
+        // Normalize powers
+        double maxPower = Math.max(
+                Math.max(Math.abs(frontLeftPower), Math.abs(frontRightPower)),
+                Math.max(Math.abs(backLeftPower), Math.abs(backRightPower))
+        );
+
+        if (maxPower != 0 && maxPower > prevMaxPower ){
+            frontLeftPower /= maxPower;
+            frontRightPower /= maxPower;
+            backLeftPower /= maxPower;
+            backRightPower /= maxPower;
+
+            frontLeftPower *= prevMaxPower;
+            frontRightPower *= prevMaxPower;
+            backLeftPower *= prevMaxPower;
+            backRightPower *= prevMaxPower;
+
+            maxPower = prevMaxPower;
+        }
+
+        double amIStuck = 0;
+
+        if ( Math.abs(errorX - prevErrorX) < 10 && Math.abs(errorY - prevErrorY) < 10){
+            amIStuck = 1.0;
+        }
+
+        prevMaxPower = maxPower;
+        return new double[]{frontLeftPower, frontRightPower, backLeftPower, backRightPower,errorX,errorY,prevMaxPower,amIStuck};
+    }
+
+
+
+
+    public int moveDS(double startX, double startY,double endX,double endY,double Mpower)
+    {
+        imu.resetYaw();
+        double currZAngle = 0;
+        int currEncoderCount = 0;
+
+
+        int currX = 0;
+        int currY = 0;
+        double TargetX = (endX-startX)*ENC2DIST_SIDEWAYS;
+        double TargetY = (endY-startY)*ENC2DIST;
+        double prevMaxPower = Mpower;
+        double prevErrorX = TargetX;
+        double prevErrorY = TargetY;
+        double amIStuck = 0;
+        int failsafe = 0;
+
+        // Resetting encoder counts
+        resetMotorEncoderCounts();
+
+        if (Math.abs(fr.getCurrentPosition()) > 5 || Math.abs(br.getCurrentPosition()) > 5) {
+            telemetry.addData("Warning", "Encoders not properly reset");
+            telemetry.addData("FR Position", fr.getCurrentPosition());
+            telemetry.addData("BR Position", br.getCurrentPosition());
+            telemetry.update();
+            sleep(100);  // Additional delay if needed
+            resetMotorEncoderCounts();  // Try one more time
+        }
+
+
+        // Setting motor to run in runToPosition
+        bl.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        fl.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER); // y value
+        fr.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER); // x value
+        br.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+        double targetmod = 200;
+
+
+        // move forward
+        timer.reset();
+        long startTime = System.nanoTime();
+        long endTime = 0;
+
+        double frontLeftPower, frontRightPower, backLeftPower, backRightPower;
+        while ((Math.abs(br.getCurrentPosition())< (Math.abs(TargetY)- targetmod)) || (Math.abs(br.getCurrentPosition())> (Math.abs(TargetY)+targetmod))
+                || (Math.abs(fr.getCurrentPosition()) < (Math.abs(TargetX)-targetmod)) || (Math.abs(fr.getCurrentPosition()) > (Math.abs(TargetX)+targetmod)))
+        {
+            myRobotOrientation = imu.getRobotOrientation(AxesReference.INTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES);
+            currZAngle = myRobotOrientation.thirdAngle;
+            double correction = PID_Turn(0,currZAngle,"off");
+            currX = fr.getCurrentPosition();
+            currY = br.getCurrentPosition();
+
+            endTime = System.nanoTime();
+            long duration = endTime - startTime;
+            double duration_msec = duration/1000000.0;
+
+            // inputs: double targetX, double currentX, double targetY, double currentY,double prevErrorX,double prevErrorY,double Mpower,double prevMaxPower
+            double[] returnedArray = PID_DS(TargetX,currX,TargetY,currY,prevErrorX,prevErrorY,Mpower,prevMaxPower);
+            // outputs: frontLeftPower, frontRightPower, backLeftPower, backRightPower,errorX,errorY,prevMaxPower (  in order )
+            frontLeftPower = returnedArray[0];
+            frontRightPower = returnedArray[1];
+            backLeftPower = returnedArray[2];
+            backRightPower = returnedArray[3];
+            prevErrorX = returnedArray[4];
+            prevErrorY = returnedArray[5];
+            prevMaxPower = returnedArray[6];
+            amIStuck = returnedArray[7];
+            startTime = System.nanoTime();
+
+            bl.setPower(backLeftPower-correction);
+            fl.setPower(frontLeftPower-correction);
+            fr.setPower(frontRightPower+correction);
+            br.setPower(backRightPower+correction);
+
+            current_X = fr.getCurrentPosition();
+            telemetry.clear();
+            telemetry.addData("odometry wheelx", fr.getCurrentPosition());
+            telemetry.addData("odometry wheely", br.getCurrentPosition());
+            telemetry.addData("correction:", correction);
+            telemetry.addData("duration_msec", duration_msec);
+            telemetry.addData("backLeftPower",backLeftPower);
+            telemetry.addData("backrightpower",backRightPower);
+            telemetry.addData("frontleftpower",frontLeftPower);
+            telemetry.addData("frontrightpower",frontRightPower);
+            telemetry.update();
+
+            // quick correct for angle if it is greater than 10 [Aarush]
+            double absError_angle = Math.abs(currZAngle);
+            if (absError_angle > 10 && false)
+            {
+                turnToZeroAngle();
+            }
+
+            if (amIStuck == 1.0){
+                failsafe = failsafe+1;
+            }
+            if (failsafe == 10){
+                telemetry.addData("failsafe no fail PLEASE", failsafe);
+                break;
+            }
+
+        }
+
+
+        startYTracker = (br.getCurrentPosition() / ENC2DIST) + startYTracker; //Adding the current movement to previous movements for x
+        startXTracker = (fr.getCurrentPosition() / ENC2DIST_SIDEWAYS) + startXTracker; // Adding current movement to previous movements for y
+        // apply zero power to avoid continuous power to the wheels
+        setMotorToZeroPower();
+
+        // return current encoder count
+        currEncoderCount = fl.getCurrentPosition();
+        myRobotOrientation = imu.getRobotOrientation(AxesReference.INTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES);
+        currZAngle = myRobotOrientation.thirdAngle;
+        telemetry.addData("fw:currEncoderCount", currEncoderCount);
+        telemetry.addData("fw:currZAngle", currZAngle);
+        telemetry.update();
+        return (currEncoderCount);
+    }
+
+
+
 
     public void turn(String direction, double targetAngle)
     {
@@ -273,10 +467,39 @@ public class UnitTest2 extends LinearOpMode {
     {
         // Reset encoder counts kept by motors
         bl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        fl.setMode((DcMotor.RunMode.STOP_AND_RESET_ENCODER));
+        fl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         fr.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        br.setMode((DcMotor.RunMode.STOP_AND_RESET_ENCODER));
-        telemetry.addData("Encoder", "Count Reset");  // telemetry: Mode Waiting
+        br.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        // Small delay to ensure reset completes
+        sleep(50);  // 50ms delay
+
+        // Verify reset
+        int maxAttempts = 3;
+        int attempt = 0;
+        while (attempt < maxAttempts &&
+                (Math.abs(fr.getCurrentPosition()) > 5 ||
+                        Math.abs(br.getCurrentPosition()) > 5)) {
+
+            // If not reset, try again
+            bl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            fl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            fr.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            br.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            sleep(50);
+            attempt++;
+        }
+
+        // Set back to run mode
+        bl.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        fl.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        fr.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        br.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+        // Verify final encoder values
+        telemetry.addData("FR Encoder", fr.getCurrentPosition());
+        telemetry.addData("BR Encoder", br.getCurrentPosition());
+        telemetry.addData("Reset Attempts", attempt);
         telemetry.update();
 
     }
@@ -307,7 +530,9 @@ public class UnitTest2 extends LinearOpMode {
         timer.reset();
         long startTime = System.nanoTime();
         long endTime = 0;
-        while (br.getCurrentPosition() > -encoderAbsCounts) {
+        double prevErrorEC = encoderAbsCounts;
+        double power;
+        while (fl.getCurrentPosition() > 0.99*(-encoderAbsCounts)) {
             myRobotOrientation = imu.getRobotOrientation(AxesReference.INTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES);
             currZAngle = myRobotOrientation.thirdAngle;
             double correction = PID_Turn(0,currZAngle,"off");
@@ -316,7 +541,10 @@ public class UnitTest2 extends LinearOpMode {
             endTime = System.nanoTime();
             long duration = endTime - startTime;
             double duration_msec = duration/1000000.0;
-            double power = PID_FB(encoderAbsCounts,Math.abs(currEncoderCount),Mpower);
+
+            double[] returnedArray = PID_FB(encoderAbsCounts,Math.abs(currEncoderCount),prevErrorEC,Mpower);
+            power = returnedArray[0];
+            prevErrorEC = returnedArray[1];
             startTime = System.nanoTime();
 
             bl.setPower(power-correction);
@@ -328,6 +556,8 @@ public class UnitTest2 extends LinearOpMode {
             telemetry.addData("power", power);
             telemetry.addData("correction:", correction);
             telemetry.addData("duration_msec", duration_msec);
+            telemetry.addData("pTerm",returnedArray[2]);
+            telemetry.addData("dTerm",returnedArray[3]);
             telemetry.update();
 
             // quick correct for angle if it is greater than 10 [Aarush]
@@ -393,12 +623,17 @@ public class UnitTest2 extends LinearOpMode {
 
         // move backward
         timer.reset();
-        while(br.getCurrentPosition() < encoderAbsCounts) {
+        double power;
+        double prevErrorEC = encoderAbsCounts;
+        while(fl.getCurrentPosition() < 0.99*encoderAbsCounts) {
             myRobotOrientation = imu.getRobotOrientation(AxesReference.INTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES);
             currZAngle = myRobotOrientation.thirdAngle;
             double correction = PID_Turn(0,currZAngle,"off");
             currEncoderCount = br.getCurrentPosition();
-            double power = PID_FB(encoderAbsCounts,Math.abs(currEncoderCount),Mpower);
+
+            double[] returnedArray = PID_FB(encoderAbsCounts,Math.abs(currEncoderCount),prevErrorEC,Mpower);
+            power = returnedArray[0];
+            prevErrorEC = returnedArray[1];
 
             bl.setPower(-power-correction);
             fl.setPower(-power-correction);
