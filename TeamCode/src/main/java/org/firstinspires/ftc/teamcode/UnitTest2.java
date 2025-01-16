@@ -143,7 +143,9 @@ public class UnitTest2 extends LinearOpMode {
 
         while (opModeIsActive()) {
 
-            moveDS(startXTracker,startYTracker,40.0,20.0,0.5);
+//            moveDS(startXTracker,startYTracker,40.0,20.0,0.5);
+
+            turn("left",90);
 
 //            moveDS(startXTracker,startYTracker,40,20.0,0.5);
 
@@ -186,6 +188,17 @@ public class UnitTest2 extends LinearOpMode {
     }
 
     public double PID_Turn (double targetAngle, double currentAngle, String minPower) {
+        double sign = 1;
+        double power = (targetAngle - currentAngle) * 0.008; // was 0.05
+        if (minPower.equalsIgnoreCase("on")&& (power != 0)) {
+            sign = Math.signum(power);
+            power = Math.max(Math.abs(power), 0.1);
+            power = power*sign;
+        }
+        return power;
+    }
+
+    public double PID_TurnCorrection (double targetAngle, double currentAngle, String minPower) {
         double sign = 1;
         double power = (targetAngle - currentAngle) * 0.035; // was 0.05
         if (minPower.equalsIgnoreCase("on")&& (power != 0)) {
@@ -327,7 +340,7 @@ public class UnitTest2 extends LinearOpMode {
         {
             myRobotOrientation = imu.getRobotOrientation(AxesReference.INTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES);
             currZAngle = myRobotOrientation.thirdAngle;
-            double correction = PID_Turn(0,currZAngle,"off");
+            double correction = PID_TurnCorrection(0,currZAngle,"off");
             currX = fr.getCurrentPosition();
             currY = br.getCurrentPosition();
 
