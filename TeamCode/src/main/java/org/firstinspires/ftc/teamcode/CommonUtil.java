@@ -207,7 +207,8 @@ public class CommonUtil extends LinearOpMode {
     }
 
     //motor power 0
-    public void setMotorToZeroPower()
+    public void
+    setMotorToZeroPower()
     {
         bl.setPower(0);
         fl.setPower(0);

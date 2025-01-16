@@ -146,6 +146,13 @@ public class UnitTest2 extends LinearOpMode {
 //            moveDS(startXTracker,startYTracker,40.0,20.0,0.5);
 
             turn("left",90);
+            sleep(1000);
+            turn("right",90);
+            sleep(1000);
+            turn("left",45);
+            sleep(1000);
+            turn("right",45);
+
 
 //            moveDS(startXTracker,startYTracker,40,20.0,0.5);
 
