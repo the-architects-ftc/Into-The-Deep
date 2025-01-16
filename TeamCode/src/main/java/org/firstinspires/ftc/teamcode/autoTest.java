@@ -63,12 +63,12 @@ public class autoTest extends CommonUtil {
         while (opModeIsActive()) {
 
             moveSideways_wCorrection("right",22,1,5); //make sdieways fast
-            wierdforward(245);
+            wierdforward(245,1);
             weirdturn();
             moveSideways_wCorrection("left",8.5,1,3);
             turn("right",35,1);
             moveSideways_wCorrection("left",8,1,3);
-            wierdforward(630);
+            wierdforward(630,1);
 ////            turn("right",10,1);
 //            moveBackwards_wDistance_wGyro(24,1,4);
 //            moveSideways_wCorrection("left",9,1,3);

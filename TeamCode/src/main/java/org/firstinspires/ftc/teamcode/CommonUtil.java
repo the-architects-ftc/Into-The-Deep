@@ -58,7 +58,7 @@ public class CommonUtil extends LinearOpMode {
     Servo lc = null;
     Servo rc = null;
 
-    Servo s4 = null;
+    CRServo s4 = null;
 
     //All Our functions!
 
@@ -92,7 +92,7 @@ public class CommonUtil extends LinearOpMode {
 
 
         s3 = hardwareMap.get(Servo.class, "BOP");
-        s4 = hardwareMap.get(Servo.class, "iWheel");
+        s4 = hardwareMap.get(CRServo.class, "iWheel");
 
         s2 = hardwareMap.get(Servo.class,"iElbow");
         s5 = hardwareMap.get(Servo.class,"iWrist");
@@ -100,7 +100,7 @@ public class CommonUtil extends LinearOpMode {
         rc = hardwareMap.get(Servo.class,"ClawR");
 
 
-        s3.setDirection(Servo.Direction.REVERSE);
+        //s3.setDirection(Servo.Direction.REVERSE);
         bl.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         fl.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         fr.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -139,7 +139,9 @@ public class CommonUtil extends LinearOpMode {
         br.setPower(0);
     }
 
-    public void wierdforward(int time){
+
+
+    public void wierdforward(int time, int comb){
         bl.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         fl.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         fr.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -148,17 +150,26 @@ public class CommonUtil extends LinearOpMode {
 //        fl.setDirection(DcMotor.Direction.FORWARD);
 //        fr.setDirection(DcMotor.Direction.FORWARD);
 //        br.setDirection(DcMotor.Direction.FORWARD);
-        br.setPower(0.9);
-        fl.setPower(0.7);
-        fr.setPower(0.7);
-        bl.setPower(0.7);
+        if (comb == 1){
+            m2.setDirection(DcMotor.Direction.REVERSE);
+            m2.setPower(1);
+        }
+        br.setPower(0.65); //was 0.9
+        fl.setPower(0.5);
+        fr.setPower(0.5);
+        bl.setPower(0.5);
+
 
         sleep(time);
         fl.setPower(0);
         fr.setPower(0);
         bl.setPower(0);
         br.setPower(0);
+        sleep(20);
+        m2.setPower(0);
     }
+
+
     public void wierdbackward(int time){
         bl.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         fl.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -233,13 +244,24 @@ public class CommonUtil extends LinearOpMode {
 //    public void intakeOff(){
 //        s4.setPower(0);
 //    }
-    public void armUp() {
-        s5.setPosition(0.5);
-        s2.setPosition(0.5);
+    public void whipitout() {
+        s5.setPosition(0.5); //was0.5
+        s2.setPosition(0.4);
+
+    }
+
+    public void comein(){
+        s5.setPosition(1);
+        s2.setPosition(0.1);
+    }
+
+    public void bsketrdy(){
+        s3.setDirection(Servo.Direction.FORWARD);
+        s3.setPosition(0.55); //up
     }
 
     public void armReleaseP1(){
-        s2.setPosition(0);
+        s2.setPosition(0.8);
         s5.setPosition(-0.2);
     }
 

@@ -56,20 +56,57 @@ public class AutoSS extends CommonUtil {
         resetMotorEncoderCounts();
         imu.resetYaw();
         clawClose(); //change to close
-
+        bsketrdy();
+        whipitout();
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
 
         while (opModeIsActive()) {
-            wierdforward(434); //was 425
-            slideUp(1,2300,4);
-            clawClose();
-            sleep(100);
-            wierdforward(84);
-            slideDown(0.5,965,10);
+
+            wierdforward(770,0); //was 755
+
+            sleep(2000); //lower for faster
+            //wierdslidedown(300);
             clawOpen();
-            wierdbackward(125);
-            slideDown(1,1430,4);
+
+            whipitout();
+      //      wierdslidedown(650);
+            wierdbackward(770);
+            clawClose();
+            bsketrdy();
+            comein();
+
+            moveSideways_wCorrection("right",70,0.8,2);
+            //wierdforward(700,0);
+
+
+            //move backward
+            //move forward
+            //move right
+            //move backward
+            //move forward
+            //move right
+            //move backward
+            //wall align
+
+
+
+
+//            clawOpen();
+//            wierdbackward(200);
+//            wierdslidedown(680);
+//            turn("right",23,2);
+
+
+
+
+//            clawClose();
+//            sleep(100);
+//            wierdforward(84);
+//            slideDown(0.5,965,10);
+//            clawOpen();
+//            wierdbackward(125);
+//            slideDown(1,1430,4);
 
             sleep(9000000);
 

@@ -97,7 +97,7 @@ public class move extends CommonUtil {
         fl = hardwareMap.get(DcMotor.class, "LF");
         fr = hardwareMap.get(DcMotor.class, "RF");
         br = hardwareMap.get(DcMotor.class, "RB");
-        s1 = hardwareMap.get(Servo.class, "s1");
+
         bl.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         fl.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         br.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -107,10 +107,7 @@ public class move extends CommonUtil {
         waitForStart();
 
         while (opModeIsActive()) {
-           s1.setDirection(Servo.Direction.FORWARD);
-           s1.setPosition(0);
-           sleep(5000);
-           s1.setPosition(1);
+
            sleep(5000);
 
 
