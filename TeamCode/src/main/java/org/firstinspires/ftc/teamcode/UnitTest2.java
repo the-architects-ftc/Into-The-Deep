@@ -134,7 +134,7 @@ public class UnitTest2 extends LinearOpMode {
 
 
         //setup
-        telemetry.setAutoClear(false);
+        telemetry.setAutoClear(true);
         // initialize hardware
 
 
@@ -143,23 +143,20 @@ public class UnitTest2 extends LinearOpMode {
 
         while (opModeIsActive()) {
 
-//            moveDS(startXTracker,startYTracker,40.0,20.0,0.5);
+            moveDS(startXTracker, startYTracker, 10.0, 20.0, 0.5);
 
-            turn("left",90);
-            sleep(1000);
-            turn("right",90);
-            sleep(1000);
-            turn("left",45);
-            sleep(1000);
-            turn("right",45);
+            moveDS(startXTracker, startYTracker, 20.0, 0.0, 0.5);
+
+            moveDS(startXTracker, startYTracker, 0.0, 15.0, 0.5);
+
+            moveDS(startXTracker, startYTracker, 20.0, 15.0, 0.5);
+
+            moveDS(startXTracker, startYTracker, 0.0, 0.0, 0.5);
 
 
-//            moveDS(startXTracker,startYTracker,40,20.0,0.5);
 
-//            moveDS(0.0,0.0,0.0,20.0,0.5);
-//            moveDS(0.0,20.0,40.0,20.0,0.5);
+            sleep(900000);
 
-            sleep(9000000);
 
         }
 
@@ -195,15 +192,23 @@ public class UnitTest2 extends LinearOpMode {
     }
 
     public double PID_Turn (double targetAngle, double currentAngle, String minPower) {
-        double sign = 1;
+        double signMin = 1;
+        double signMax = 1;
         double power = (targetAngle - currentAngle) * 0.008; // was 0.05
-        if (minPower.equalsIgnoreCase("on")&& (power != 0)) {
-            sign = Math.signum(power);
+        if (power > 0.6){
+            signMax = Math.signum(power);
+            power = Math.min(Math.abs(power),0.3);
+            power = power*signMax;
+        }else if (minPower.equalsIgnoreCase("on")&& (power != 0)) {
+            signMin = Math.signum(power);
             power = Math.max(Math.abs(power), 0.1);
-            power = power*sign;
+            power = power*signMin;
         }
+
         return power;
     }
+
+
 
     public double PID_TurnCorrection (double targetAngle, double currentAngle, String minPower) {
         double sign = 1;
@@ -377,7 +382,7 @@ public class UnitTest2 extends LinearOpMode {
             telemetry.clear();
             telemetry.addData("odometry wheelx", fr.getCurrentPosition());
             telemetry.addData("odometry wheely", br.getCurrentPosition());
-            telemetry.addData("correction:", correction);
+            telemetry.addData("angle:", currZAngle);
             telemetry.addData("duration_msec", duration_msec);
             telemetry.addData("backLeftPower",backLeftPower);
             telemetry.addData("backrightpower",backRightPower);
@@ -386,8 +391,8 @@ public class UnitTest2 extends LinearOpMode {
             telemetry.update();
 
             // quick correct for angle if it is greater than 10 [Aarush]
-            double absError_angle = Math.abs(currZAngle);
-            if (absError_angle > 10 && false)
+            double absErrorAngle = Math.abs(currZAngle);
+            if (absErrorAngle > 15 )
             {
                 turnToZeroAngle();
             }
@@ -403,8 +408,9 @@ public class UnitTest2 extends LinearOpMode {
         }
 
 
-        startYTracker = (br.getCurrentPosition() / ENC2DIST) + startYTracker; //Adding the current movement to previous movements for x
-        startXTracker = (fr.getCurrentPosition() / ENC2DIST_SIDEWAYS) + startXTracker; // Adding current movement to previous movements for y
+        turnToZeroAngle();
+        startYTracker = (br.getCurrentPosition() / ENC2DIST) + startY; //Adding the current movement to previous movements for x
+        startXTracker = (fr.getCurrentPosition() / ENC2DIST_SIDEWAYS) + startX; // Adding current movement to previous movements for y
         // apply zero power to avoid continuous power to the wheels
         setMotorToZeroPower();
 
@@ -467,6 +473,9 @@ public class UnitTest2 extends LinearOpMode {
         imu.resetYaw(); // [ AARUSH ]
 
     }
+
+
+
 
 
     // Set motor directions
