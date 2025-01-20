@@ -72,8 +72,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
  */
 
 
-@Autonomous(name="Unit_Test2", group="Linear Opmode2")
-public class UnitTest2 extends LinearOpMode {
+@Autonomous(name="Unit_Test3", group="Linear Opmode2")
+public class UnitTest3 extends LinearOpMode {
 
     double ENC2DIST = 2000.0/3.9558976; //2000.0/48.0; // FW/BW
     double ENC2DIST_SIDEWAYS = 2000.0/3.9558976;
@@ -143,23 +143,16 @@ public class UnitTest2 extends LinearOpMode {
 
         while (opModeIsActive()) {
 
-//            moveDS(startXTracker, startYTracker, 10.0, 20.0, 0.5);
-//
-//            moveDS(startXTracker, startYTracker, 20.0, 0.0, 0.5);
-//
-//            moveDS(startXTracker, startYTracker, 0.0, 15.0, 0.5);
-//
-//            moveDS(startXTracker, startYTracker, 20.0, 15.0, 0.5);
-//
-//            moveDS(startXTracker, startYTracker, 0.0, 0.0, 0.5);
-
-            telemetry.addData("encoder x", fr.getCurrentPosition());
-            telemetry.addData("encoder y", br.getCurrentPosition());
-            telemetry.update();
+            turn("left",90);
+            turn("right",90);
+            turn("left",45);
+            turn("right",45);
 
 
 
 
+
+            sleep(90000000);
 
 
 
@@ -202,7 +195,7 @@ public class UnitTest2 extends LinearOpMode {
         double power = (targetAngle - currentAngle) * 0.008; // was 0.05
         if (power > 0.6){
             signMax = Math.signum(power);
-            power = Math.min(Math.abs(power),0.3);
+            power = Math.min(Math.abs(power),0.6);
             power = power*signMax;
         }else if (minPower.equalsIgnoreCase("on")&& (power != 0)) {
             signMin = Math.signum(power);
@@ -339,8 +332,8 @@ public class UnitTest2 extends LinearOpMode {
 
         // Setting motor to run in runToPosition
         bl.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        fl.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        fr.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER); // x value
+        fl.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER); // x value
+        fr.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         br.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER); // y value
 
         double targetmod = 200;
@@ -353,12 +346,12 @@ public class UnitTest2 extends LinearOpMode {
 
         double frontLeftPower, frontRightPower, backLeftPower, backRightPower;
         while ((Math.abs(br.getCurrentPosition())< (Math.abs(TargetY)- targetmod)) || (Math.abs(br.getCurrentPosition())> (Math.abs(TargetY)+targetmod))
-                || (Math.abs(fr.getCurrentPosition()) < (Math.abs(TargetX)-targetmod)) || (Math.abs(fr.getCurrentPosition()) > (Math.abs(TargetX)+targetmod)))
+                || (Math.abs(fl.getCurrentPosition()) < (Math.abs(TargetX)-targetmod)) || (Math.abs(fl.getCurrentPosition()) > (Math.abs(TargetX)+targetmod)))
         {
             myRobotOrientation = imu.getRobotOrientation(AxesReference.INTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES);
             currZAngle = myRobotOrientation.thirdAngle;
             double correction = PID_TurnCorrection(0,currZAngle,"off");
-            currX = fr.getCurrentPosition();
+            currX = fl.getCurrentPosition();
             currY = br.getCurrentPosition();
 
             endTime = System.nanoTime();
@@ -385,7 +378,7 @@ public class UnitTest2 extends LinearOpMode {
 
             current_X = fr.getCurrentPosition();
             telemetry.clear();
-            telemetry.addData("odometry wheelx", fr.getCurrentPosition());
+            telemetry.addData("odometry wheelx", fl.getCurrentPosition());
             telemetry.addData("odometry wheely", br.getCurrentPosition());
             telemetry.addData("angle:", currZAngle);
             telemetry.addData("duration_msec", duration_msec);
@@ -415,7 +408,7 @@ public class UnitTest2 extends LinearOpMode {
 
         turnToZeroAngle();
         startYTracker = (br.getCurrentPosition() / ENC2DIST) + startY; //Adding the current movement to previous movements for x
-        startXTracker = (fr.getCurrentPosition() / ENC2DIST_SIDEWAYS) + startX; // Adding current movement to previous movements for y
+        startXTracker = (fl.getCurrentPosition() / ENC2DIST_SIDEWAYS) + startX; // Adding current movement to previous movements for y
         // apply zero power to avoid continuous power to the wheels
         setMotorToZeroPower();
 
