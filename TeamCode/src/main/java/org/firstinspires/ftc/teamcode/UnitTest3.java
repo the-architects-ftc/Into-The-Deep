@@ -38,6 +38,7 @@ import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.IMU;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
@@ -78,6 +79,7 @@ public class UnitTest3 extends LinearOpMode {
     double current_X = 0;
     double current_Y = 0;
 
+
     ElapsedTime timer = new ElapsedTime();
 
     //imu init
@@ -89,6 +91,11 @@ public class UnitTest3 extends LinearOpMode {
     DcMotor fl = null;
     DcMotor fr = null;
     DcMotor br = null;
+    DcMotor m2 = null;
+    Servo s2 = null;
+    Servo s5 = null;
+    Servo lc = null;
+    Servo rc = null;
 
     Orientation myRobotOrientation;
 
@@ -112,12 +119,20 @@ public class UnitTest3 extends LinearOpMode {
         fl = hardwareMap.get(DcMotor.class, "LF");
         fr = hardwareMap.get(DcMotor.class, "RF");
         br = hardwareMap.get(DcMotor.class, "RB");
+        m2 = hardwareMap.get(DcMotor.class, "lSlide");
+        lc = hardwareMap.get(Servo.class,"ClawL");
+        rc = hardwareMap.get(Servo.class,"ClawR");
         bl.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         fl.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         br.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         fr.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        m2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+        s2 = hardwareMap.get(Servo.class,"iElbow");
+        s5 = hardwareMap.get(Servo.class,"iWrist");
         bl.setDirection(DcMotorSimple.Direction.REVERSE);
         fl.setDirection(DcMotorSimple.Direction.REVERSE);
+
 
         resetMotorEncoderCounts();
 
@@ -126,16 +141,31 @@ public class UnitTest3 extends LinearOpMode {
         telemetry.setAutoClear(true);
         // initialize hardware
 
-
+        clawClose();
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
 
         while (opModeIsActive()) {
 
-            turn("left",90);
-            turn("right",90);
-            turn("left",45);
-            turn("right",45);
+
+
+            m2.setDirection(DcMotor.Direction.REVERSE);
+            m2.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            m2.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+            moveDS(startXTracker,startYTracker,25,9,1,"none");
+
+            moveDS(startXTracker, startYTracker,25,36,0.7,"specimen");
+            m2.setPower(-0.5);
+            sleep(425);
+            m2.setPower(0.1);
+            sleep(100);
+            clawOpen();
+
+            moveDS(startXTracker,startYTracker,25,9,1,"none");
+
+            moveDS(startXTracker,startYTracker,-22,10,0.7,"none");
+
 
 
 
@@ -289,7 +319,7 @@ public class UnitTest3 extends LinearOpMode {
 
 
 
-    public int moveDS(double startX, double startY,double endX,double endY,double Mpower)
+    public int moveDS(double startX, double startY,double endX,double endY,double Mpower,String LslideType)
     {
         imu.resetYaw();
         double currZAngle = 0;
@@ -364,6 +394,13 @@ public class UnitTest3 extends LinearOpMode {
             fl.setPower(frontLeftPower-correction);
             fr.setPower(frontRightPower+correction);
             br.setPower(backRightPower+correction);
+
+            if (LslideType == "specimen"&& m2.getCurrentPosition()<1347){
+                m2.setDirection(DcMotorSimple.Direction.REVERSE);
+                m2.setPower(1);
+            }else if ( LslideType == "specimen" && m2.getCurrentPosition() >= 1347){
+                m2.setPower(0.1);
+            }
 
             current_X = fr.getCurrentPosition();
             telemetry.clear();
@@ -614,6 +651,18 @@ public class UnitTest3 extends LinearOpMode {
         fr.setPower(0);
         br.setPower(0);
     }
+    public void clawOpen() {
+        rc.setDirection(Servo.Direction.FORWARD);
+        lc.setDirection(Servo.Direction.REVERSE);
+        rc.setPosition(1);
+        lc.setPosition(1);
+    }
+    public void clawClose() {
+        rc.setDirection(Servo.Direction.FORWARD);
+        lc.setDirection(Servo.Direction.REVERSE);
+        rc.setPosition(0);
+        lc.setPosition(0);
+    }
 
     //move backwards with gyro correction
     public int moveBackwards_wDistance_wGyro(double DistanceAbsIn,double Mpower)
@@ -768,6 +817,11 @@ public class UnitTest3 extends LinearOpMode {
         telemetry.addData("sideways:currEncoderCount (final)", currEncoderCount);
         telemetry.update();
         return (currEncoderCount);
+    }
+    public void whipitout() {
+        s5.setPosition(0.5); //was0.5
+        s2.setPosition(0.4);
+
     }
 
     public void turnToZeroAngle()

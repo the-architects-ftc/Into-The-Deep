@@ -41,7 +41,8 @@ public class FinalLimelightv2 extends CommonUtil {
                     tx = result.getTx();
 
                     //move it to the left
-                    moveSideways_wCorrection("left", 2, 0.7, 1);
+                    //moveSideways_wCorrection("left", 2, 0.7, 1);
+                    sidewaysleft(40);
                     result = limelight.getLatestResult();
                     tx = result.getTx();
                 }
@@ -54,101 +55,102 @@ public class FinalLimelightv2 extends CommonUtil {
                     result = limelight.getLatestResult();
                     tx = result.getTx();
                     //move it to the left
-                    moveSideways_wCorrection("right", 2, 0.7, 1);
+                    //moveSideways_wCorrection("right", 2, 0.7, 1);
+                    sidewaysright(40);
                     result = limelight.getLatestResult();
                     tx = result.getTx();
                 }
                 if (tx >= -1 && tx <= 1) {
                     check = 1;
                 }
-                if (check == 1){
-                    while (Math.abs(ta - thres)> 0.3){
-                        disin = Math.abs(ta-thres) * 2.5; //adjust the 2.5 to lower if u want it to move less and higher if u want it to move more
-                        telemetry.addData("disin",disin);
-                        telemetry.update();
-                        if (disin < 1 ){
-                            telemetry.addData("Finished","Moving");
-                            telemetry.update();
 
-                            moveSideways_wCorrection("right", 3.6, 0.8, 5);
-                            moveSideways_wCorrection("right", 3.6, 0.8, 5);
-                            moveForward_wDistance_wGyro(6.5,0.5,1);
-                            sleep(99999);
-                        }
-                        moveForward_wDistance_wGyro(disin + 8,0.6,1);
-                        setMotorToZeroPower();
-                        turn("right",1,1);
-                        setMotorToZeroPower();
-                        result = limelight.getLatestResult();
-                        oldta = ta;
-                        ta = result.getTa();
-                        if (Math.abs(ta - thres)<= 0.3){
-                            telemetry.addData("Finished","Moving");
-                            telemetry.update();
-                            moveSideways_wCorrection("right", 3.6, 0.8, 5);
-                            moveSideways_wCorrection("right", 3.6, 0.8, 5);
-                            moveForward_wDistance_wGyro(6.5,0.5,1);
-                            sleep(99999);
-
-                        }
-
-                        if (Math.abs(ta - oldta) <= 0.1){
-                            moveSideways_wCorrection("right", 3.6, 0.8, 5);
-                            moveSideways_wCorrection("right", 3.6, 0.8, 5);
-                            moveForward_wDistance_wGyro(6.5,0.5,1);
-                            sleep(99999);
-                        }
-                        sleep(100);
-                        telemetry.addData("Ta",ta);
-                        telemetry.update();
-                    }
-                    result = limelight.getLatestResult();
-                    oldta = ta;
-                    ta = result.getTa();
-                    if (Math.abs(ta - thres)<= 0.3){
-
-                        turn("right",5,1);
-                        telemetry.addData("Finished","Moving");
-                        telemetry.update();
-
-                        moveSideways_wCorrection("right", 3.6, 0.8, 5);
-                        moveSideways_wCorrection("right", 3.6, 0.8, 5);
-                        moveForward_wDistance_wGyro(6.5,0.5,1);
-                        sleep(99999);
-
-                    }
-                    result = limelight.getLatestResult();
-                    oldta = ta;
-                    ta = result.getTa();
-                }
-                moveForward_wDistance_wGyro(disin + 8,0.6,1);
-                setMotorToZeroPower();
-                turn("right",1,1);
-                setMotorToZeroPower();
-                result = limelight.getLatestResult();
-                oldta = ta;
-                ta = result.getTa();
-                if (Math.abs(ta - thres)<= 0.3){
-                    telemetry.addData("Finished","Moving");
-                    telemetry.update();
-                    moveSideways_wCorrection("right", 3.6, 0.8, 5);
-                    moveSideways_wCorrection("right", 3.6, 0.8, 5);
-                    moveForward_wDistance_wGyro(6.5,0.5,1);
-                    sleep(99999);
-
-                }
-
-                if (Math.abs(ta - oldta) <= 0.1){
-                    moveSideways_wCorrection("right", 3.6, 0.8, 5);
-                    moveSideways_wCorrection("right", 3.6, 0.8, 5);
-                    moveForward_wDistance_wGyro(6.5,0.5,1);
-                    sleep(99999);
-                }
-                result = limelight.getLatestResult();
-                oldta = ta;
-                ta = result.getTa();
-
-
+                //get the robot go to the spot so it can move forward/backward after the left and right movement and then figure out the ta value and change it
+//                if (check == 1){
+//                    while (Math.abs(ta - thres)> 0.3){
+//                        disin = Math.abs(ta-thres) * 1.5; //adjust the 2.5 to lower if u want it to move less and higher if u want it to move more
+//                        telemetry.addData("disin",disin);
+//                        telemetry.update();
+//                        if (disin < 0.5 ){ //was 1
+//                            telemetry.addData("Finished","Moving");
+//                            telemetry.update();
+//
+//
+//                            sleep(99999);
+//                        }
+//                        moveForward_wDistance_wGyro(disin + 4,0.6,4); //was 8
+//                        setMotorToZeroPower();
+//                        turn("right",1,1);
+//                        setMotorToZeroPower();
+//                        result = limelight.getLatestResult();
+//                        oldta = ta;
+//                        ta = result.getTa();
+//                        if (Math.abs(ta - thres)<= 0.3){
+//                            telemetry.addData("Finished","Moving");
+//                            telemetry.update();
+//                            moveSideways_wCorrection("right", 3.6, 0.8, 5);
+//                            moveSideways_wCorrection("right", 3.6, 0.8, 5);
+//                            moveForward_wDistance_wGyro(6.5,0.5,1);
+//                            sleep(99999);
+//
+//                        }
+//
+//                        if (Math.abs(ta - oldta) <= 0.1){
+//                            moveSideways_wCorrection("right", 3.6, 0.8, 5);
+//                            moveSideways_wCorrection("right", 3.6, 0.8, 5);
+//                            moveForward_wDistance_wGyro(6.5,0.5,1);
+//                            sleep(99999);
+//                        }
+//                        sleep(100);
+//                        telemetry.addData("Ta",ta);
+//                        telemetry.update();
+//                    }
+//                    result = limelight.getLatestResult();
+//                    oldta = ta;
+//                    ta = result.getTa();
+//                    if (Math.abs(ta - thres)<= 0.3){
+//
+//                        turn("right",5,1);
+//                        telemetry.addData("Finished","Moving");
+//                        telemetry.update();
+//
+//                        moveSideways_wCorrection("right", 3.6, 0.8, 5);
+//                        moveSideways_wCorrection("right", 3.6, 0.8, 5);
+//                        moveForward_wDistance_wGyro(6.5,0.5,1);
+//                        sleep(99999);
+//
+//                    }
+//                    result = limelight.getLatestResult();
+//                    oldta = ta;
+//                    ta = result.getTa();
+//                }
+//                moveForward_wDistance_wGyro(disin + 8,0.6,1);
+//                setMotorToZeroPower();
+//                turn("right",1,1);
+//                setMotorToZeroPower();
+//                result = limelight.getLatestResult();
+//                oldta = ta;
+//                ta = result.getTa();
+//                if (Math.abs(ta - thres)<= 0.3){
+//                    telemetry.addData("Finished","Moving");
+//                    telemetry.update();
+//                    moveSideways_wCorrection("right", 3.6, 0.8, 5);
+//                    moveSideways_wCorrection("right", 3.6, 0.8, 5);
+//                    moveForward_wDistance_wGyro(6.5,0.5,1);
+//                    sleep(99999);
+//
+//                }
+//
+//                if (Math.abs(ta - oldta) <= 0.1){
+//                    moveSideways_wCorrection("right", 3.6, 0.8, 5);
+//                    moveSideways_wCorrection("right", 3.6, 0.8, 5);
+//                    moveForward_wDistance_wGyro(6.5,0.5,1);
+//                    sleep(99999);
+//                }
+//                result = limelight.getLatestResult();
+//                oldta = ta;
+//                ta = result.getTa();
+//
+//
             }
 
         }

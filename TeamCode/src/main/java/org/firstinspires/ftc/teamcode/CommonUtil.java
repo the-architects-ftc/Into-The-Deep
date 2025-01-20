@@ -160,6 +160,47 @@ public class CommonUtil extends LinearOpMode {
         m2.setPower(0);
     }
 
+    public void sidewaysright(int time){
+        bl.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        fl.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        fr.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        br.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        br.setPower(0.65);
+        fl.setPower(0.5);
+        fr.setPower(-0.5);
+        bl.setPower(-0.5);
+
+
+        sleep(time);
+        fl.setPower(0);
+        fr.setPower(0);
+        bl.setPower(0);
+        br.setPower(0);
+        sleep(20);
+
+    }
+    public void sidewaysleft(int time){
+        bl.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        fl.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        fr.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        br.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        br.setPower(-0.65);
+        fl.setPower(-0.5);
+        fr.setPower(0.5);
+        bl.setPower(0.5);
+
+
+        sleep(time);
+        fl.setPower(0);
+        fr.setPower(0);
+        bl.setPower(0);
+        br.setPower(0);
+        sleep(20);
+
+    }
+
+
+
 
     public void wierdbackward(int time){
         bl.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
