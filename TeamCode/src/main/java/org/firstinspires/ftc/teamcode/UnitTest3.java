@@ -29,6 +29,7 @@
 //MINE ( AARUSH )
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
@@ -40,7 +41,8 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
-
+import com.qualcomm.hardware.limelightvision.LLResult;
+import com.qualcomm.hardware.limelightvision.Limelight3A;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
@@ -92,10 +94,15 @@ public class UnitTest3 extends LinearOpMode {
     DcMotor fr = null;
     DcMotor br = null;
     DcMotor m2 = null;
+    private Limelight3A limelight;
     Servo s2 = null;
     Servo s5 = null;
     Servo lc = null;
     Servo rc = null;
+
+    Servo s3 = null;
+
+    CRServo s4 = null;
 
     Orientation myRobotOrientation;
 
@@ -122,6 +129,8 @@ public class UnitTest3 extends LinearOpMode {
         m2 = hardwareMap.get(DcMotor.class, "lSlide");
         lc = hardwareMap.get(Servo.class,"ClawL");
         rc = hardwareMap.get(Servo.class,"ClawR");
+        s3 = hardwareMap.get(Servo.class, "BOP");
+        s4 = hardwareMap.get(CRServo.class, "iWheel");
         bl.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         fl.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         br.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -142,8 +151,20 @@ public class UnitTest3 extends LinearOpMode {
         // initialize hardware
 
         clawClose();
+        s5.setPosition(0.45);
+        s3.setPosition(0.4);
+
+        //limelight
+        limelight = hardwareMap.get(Limelight3A.class, "limelight");
+        limelight.setPollRateHz(100);
+        telemetry.setMsTransmissionInterval(11);
+        telemetry.update();
+        limelight.pipelineSwitch(4);
+        limelight.start();
+
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
+
 
         while (opModeIsActive()) {
 
@@ -153,18 +174,107 @@ public class UnitTest3 extends LinearOpMode {
             m2.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             m2.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
-            moveDS(startXTracker,startYTracker,25,9,1,"none");
+//            moveDS(startXTracker,startYTracker,25,9,1,"none");
 
-            moveDS(startXTracker, startYTracker,25,36,0.7,"specimen");
+            moveDS(startXTracker, startYTracker,30,32.5,0.5,"specimen");
+            sleep(200);
             m2.setPower(-0.5);
-            sleep(425);
+            sleep(390);
             m2.setPower(0.1);
             sleep(100);
             clawOpen();
 
-            moveDS(startXTracker,startYTracker,25,9,1,"none");
 
-            moveDS(startXTracker,startYTracker,-22,10,0.7,"none");
+//            moveDS(startXTracker,startYTracker,25,9,1,"none");
+            turnToZeroAngle();
+            s3.setPosition(0.55);
+
+            moveDS(startXTracker,startYTracker,-11,22,0.7,"specimen");
+
+
+            clawClose();
+            armDown();
+            intakeOn();
+            sleep(1500);
+
+            moveDS(startXTracker,startYTracker,-10,11,0.3,"down");
+
+            moveDS(startXTracker,startYTracker,-27.0,7.5,0.6,"none");
+
+
+
+            //putbhrer uwuwuwuwuw
+
+
+            whipitout();
+            intakeOn();
+            armUp();
+            sleep(1500);
+
+            intakeBack();
+            sleep(700);
+
+            whipitout();
+            sleep(200);
+
+            m2.setPower(1);
+            sleep(1900);
+            deposit();
+            m2.setPower(0.1);
+
+
+
+
+
+
+
+
+            sleep(500);
+            s3.setPosition(0.55);
+
+            moveDS(startXTracker,startYTracker,-19,22,0.7,"down");
+
+            clawClose();
+            armDown();
+            intakeOn();
+            sleep(1500);
+
+            moveDS(startXTracker,startYTracker,-19,11,0.3,"down");
+
+            moveDS(startXTracker,startYTracker,-27.0,7.5,0.6,"none");
+
+
+
+            //putbhrer uwuwuwuwuw
+
+
+            whipitout();
+            intakeOn();
+            armUp();
+            sleep(1500);
+
+            intakeBack();
+            sleep(700);
+
+            whipitout();
+            sleep(200);
+
+            m2.setPower(1);
+            sleep(1900);
+            deposit();
+            m2.setPower(0.1);
+
+
+
+
+
+
+
+
+            sleep(3000);
+            s3.setPosition(0.55);
+
+
 
 
 
@@ -206,6 +316,52 @@ public class UnitTest3 extends LinearOpMode {
         br = hardwareMap.get(DcMotor.class, "RB");
 
 
+    }
+
+    public void armDown(){
+        s2.setPosition(0.45);
+        s5.setPosition(0.45);
+    }
+
+    public void armUp(){
+
+        s2.setPosition(0.35);
+        //s6.setPosition(0.5);
+        //s12.setPosition(1);
+//                    sleep(100);
+//                    s12.setPosition(0.5);
+        s5.setPosition(1);
+    }
+
+    public void intakeBack(){
+        s4.setPower(-1);
+    }
+
+    public void intakeOn(){
+        s4.setPower(1);
+    }
+
+
+
+    public void intakeOff(){
+        s4.setPower(0);
+    }
+
+    public void deposit(){
+        s3.setDirection(Servo.Direction.FORWARD);
+        s3.setPosition(0.75); //down
+    }
+
+    public void slideDown(){
+
+        while(m2.getCurrentPosition()>20){
+            m2.setPower(-1);
+        }
+        slideIdle();
+    }
+
+    public void slideIdle(){
+        m2.setPower(0.1);
     }
 
     public double PID_Turn (double targetAngle, double currentAngle, String minPower) {
@@ -266,7 +422,7 @@ public class UnitTest3 extends LinearOpMode {
     {
         // Calculate X power
         double errorX = targetX - currentX;
-        double pTermX = errorX * 0.0001; // 0.00015
+        double pTermX = errorX * 0.0002; // 0.00015
         double dTermX = (errorX - prevErrorX) * 0.0006; // 0.0006
         double powerX = pTermX + dTermX;
         if(Math.abs(errorX) < 200){
@@ -274,7 +430,7 @@ public class UnitTest3 extends LinearOpMode {
         }
         // Calculate Y power
         double errorY = targetY - currentY;
-        double pTermY = errorY * 0.0001;
+        double pTermY = errorY * 0.0002;
         double dTermY = (errorY - prevErrorY) * 0.0008;
         double powerY = pTermY + dTermY;
         if(Math.abs(errorY) < 200){
@@ -402,6 +558,15 @@ public class UnitTest3 extends LinearOpMode {
                 m2.setPower(0.1);
             }
 
+            if (LslideType == "down"&& m2.getCurrentPosition()>20){
+                m2.setDirection(DcMotorSimple.Direction.REVERSE);
+                m2.setPower(-1);
+            }else if ( LslideType == "down" && m2.getCurrentPosition() < 20){
+                m2.setPower(0.1);
+            }
+
+
+
             current_X = fr.getCurrentPosition();
             telemetry.clear();
             telemetry.addData("odometry wheelx", fl.getCurrentPosition());
@@ -432,11 +597,12 @@ public class UnitTest3 extends LinearOpMode {
         }
 
 
-        turnToZeroAngle();
+
         startYTracker = (br.getCurrentPosition() / ENC2DIST) + startY; //Adding the current movement to previous movements for x
         startXTracker = (fl.getCurrentPosition() / ENC2DIST_SIDEWAYS) + startX; // Adding current movement to previous movements for y
         // apply zero power to avoid continuous power to the wheels
         setMotorToZeroPower();
+        turnToZeroAngle();
 
         // return current encoder count
         currEncoderCount = fl.getCurrentPosition();
@@ -660,8 +826,8 @@ public class UnitTest3 extends LinearOpMode {
     public void clawClose() {
         rc.setDirection(Servo.Direction.FORWARD);
         lc.setDirection(Servo.Direction.REVERSE);
-        rc.setPosition(0);
-        lc.setPosition(0);
+        rc.setPosition(0.6);
+        lc.setPosition(0.6);
     }
 
     //move backwards with gyro correction

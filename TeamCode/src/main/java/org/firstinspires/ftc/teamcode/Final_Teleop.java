@@ -191,27 +191,26 @@ public class Final_Teleop extends LinearOpMode {
 
 
             //Intake arm motor
-            if (gamepad1.x) {
-                s2.setPosition(0.5);
-                s5.setPosition(0.5);
-            }
 
 
-            if (gamepad1.y) {
 
-            }
+
 
 
             //specimen claw servo
             if (gamepad1.right_bumper != gamepad1RB_previous && gamepad1.right_bumper) {
-                s5.setDirection(Servo.Direction.FORWARD);
-                s5.setPosition(1); // open
+                rc.setDirection(Servo.Direction.FORWARD);
+                lc.setDirection(Servo.Direction.REVERSE);
+                rc.setPosition(1);
+                lc.setPosition(1); // open
             }
             gamepad1RB_previous = gamepad1.right_bumper;
 
             if (gamepad1.left_bumper != gamepad1LB_previous && gamepad1.left_bumper) {
-                s5.setDirection(Servo.Direction.REVERSE);
-                s5.setPosition(1); //close
+                rc.setDirection(Servo.Direction.FORWARD);
+                lc.setDirection(Servo.Direction.REVERSE);
+                rc.setPosition(0.6);
+                lc.setPosition(0.6);//close
             }
             gamepad1LB_previous = gamepad1.left_bumper;
 
@@ -271,20 +270,20 @@ public class Final_Teleop extends LinearOpMode {
             }
 
             //specimen claw
-            if (gamepad2.right_trigger > 0.2) {
-                rc.setDirection(Servo.Direction.FORWARD);
-                lc.setDirection(Servo.Direction.REVERSE);
-                rc.setPosition(1);
-                lc.setPosition(1); //open
-            }
-
-
-            if (gamepad2.left_trigger > 0.2) {
-                rc.setDirection(Servo.Direction.FORWARD);
-                lc.setDirection(Servo.Direction.REVERSE);
-                rc.setPosition(0);
-                lc.setPosition(0); //close
-            }
+//            if (gamepad2.right_trigger > 0.2) {
+//                rc.setDirection(Servo.Direction.FORWARD);
+//                lc.setDirection(Servo.Direction.REVERSE);
+//                rc.setPosition(1);
+//                lc.setPosition(1); //open
+//            }
+//
+//
+//            if (gamepad2.left_trigger > 0.2) {
+//                rc.setDirection(Servo.Direction.FORWARD);
+//                lc.setDirection(Servo.Direction.REVERSE);
+//                rc.setPosition(0);
+//                lc.setPosition(0); //close
+//            }
 
 
             //movement
