@@ -274,7 +274,7 @@ public class Final_Teleop extends LinearOpMode {
 
             if (gamepad1.left_trigger > 0.2) {
                 s3.setDirection(Servo.Direction.FORWARD);
-                s3.setPosition(0.7); //down
+                s3.setPosition(0.77); //down
             }
 
             //specimen claw
