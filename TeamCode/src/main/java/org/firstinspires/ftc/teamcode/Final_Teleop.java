@@ -162,12 +162,20 @@ public class Final_Teleop extends LinearOpMode {
             //Linear Slide movement
             if (gamepad1.a && gamepad1.b) {
                 m2Power = 0;
+                telemetry.addData("positioning", m2.getCurrentPosition());
+                telemetry.update();
             } else if (gamepad1.b) {
                 m2Power = 1;
+                telemetry.addData("positioning", m2.getCurrentPosition());
+                telemetry.update();
             } else if (gamepad1.a) {
                 m2Power = -1;
+                telemetry.addData("positioning", m2.getCurrentPosition());
+                telemetry.update();
             } else {
                 m2Power = -0.1;
+                telemetry.addData("positioning", m2.getCurrentPosition());
+                telemetry.update();
             }
 
 //

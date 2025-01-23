@@ -151,8 +151,8 @@ public class UnitTest3 extends LinearOpMode {
         // initialize hardware
 
         clawClose();
-        s5.setPosition(0.45);
-        s3.setPosition(0.4);
+        s5.setPosition(0.28);
+        s3.setPosition(0.3);
 
         //limelight
         limelight = hardwareMap.get(Limelight3A.class, "limelight");
@@ -174,9 +174,12 @@ public class UnitTest3 extends LinearOpMode {
             m2.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             m2.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
-//            moveDS(startXTracker,startYTracker,25,9,1,"none");
 
-            moveDS(startXTracker, startYTracker,30,32.5,0.5,"specimen");
+
+//
+//
+            moveDS(startXTracker,startYTracker,25,9,1,"none");
+            moveDS(startXTracker, startYTracker,30,32,0.5,"specimen");
             sleep(200);
             m2.setPower(-0.5);
             sleep(390);
@@ -189,7 +192,7 @@ public class UnitTest3 extends LinearOpMode {
             turnToZeroAngle();
             s3.setPosition(0.55);
 
-            moveDS(startXTracker,startYTracker,-11,22,0.7,"specimen");
+            moveDS(startXTracker,startYTracker,-11,22,0.7,"max");
 
 
             clawClose();
@@ -263,16 +266,10 @@ public class UnitTest3 extends LinearOpMode {
             sleep(1900);
             deposit();
             m2.setPower(0.1);
-
-
-
-
-
-
-
-
-            sleep(3000);
             s3.setPosition(0.55);
+
+
+            moveDS(startXTracker,startYTracker,7,60,0.8,"down");
 
 
 
@@ -301,7 +298,7 @@ public class UnitTest3 extends LinearOpMode {
         // map imu
         imu = hardwareMap.get(BHI260IMU.class,"imu");
         myIMUParameters = new IMU.Parameters(
-                new RevHubOrientationOnRobot(RevHubOrientationOnRobot.LogoFacingDirection.UP,RevHubOrientationOnRobot.UsbFacingDirection.BACKWARD )
+                new RevHubOrientationOnRobot(RevHubOrientationOnRobot.LogoFacingDirection.BACKWARD,RevHubOrientationOnRobot.UsbFacingDirection.UP )
         );
         imu.initialize(myIMUParameters);
         imu.resetYaw();
@@ -326,11 +323,13 @@ public class UnitTest3 extends LinearOpMode {
     public void armUp(){
 
         s2.setPosition(0.35);
+        sleep(150);
+        s5.setPosition(1);
         //s6.setPosition(0.5);
         //s12.setPosition(1);
 //                    sleep(100);
 //                    s12.setPosition(0.5);
-        s5.setPosition(1);
+
     }
 
     public void intakeBack(){
@@ -564,6 +563,15 @@ public class UnitTest3 extends LinearOpMode {
             }else if ( LslideType == "down" && m2.getCurrentPosition() < 20){
                 m2.setPower(0.1);
             }
+
+            if (LslideType == "max"&& m2.getCurrentPosition()<3200){
+                m2.setDirection(DcMotorSimple.Direction.REVERSE);
+                m2.setPower(1);
+            }else if ( LslideType == "max" && m2.getCurrentPosition() >= 3200){
+                m2.setPower(0.1);
+            }
+
+
 
 
 
