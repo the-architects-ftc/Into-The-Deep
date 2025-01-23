@@ -64,8 +64,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
  */
 
 
-@Autonomous(name="Unit_Test3", group="Linear Opmode2")
-public class UnitTest3 extends LinearOpMode {
+@Autonomous(name="Unit_Test_Omega", group="Linear Opmode2")
+public class UnitTest_Omega extends LinearOpMode {
 
     double ENC2DIST = 2000.0/3.9558976; //2000.0/48.0; // FW/BW
     double ENC2DIST_SIDEWAYS = 2000.0/3.9558976;
@@ -180,36 +180,25 @@ public class UnitTest3 extends LinearOpMode {
 //
 
             whipitout();
-            moveDS(startXTracker,startYTracker,30,9,0.4,"none");
-            moveDS(startXTracker, startYTracker,30,29,0.5,"specimen");
-            sleep(200);
-            m2.setPower(-0.5);
-            sleep(450);
+            moveDS(startXTracker,startYTracker,-28.5,5.0,0.6,"max");
+
+            m2.setPower(1);
+            sleep(1900);
+            deposit();
             m2.setPower(0.1);
-            sleep(100);
-            clawOpen();
-
-
-
-            turnToZeroAngle();
+            sleep(1000);
             s3.setPosition(0.55);
 
-            moveDS(startXTracker,startYTracker,30,2,0.5,"specimen");
-             moveDS(startXTracker,startYTracker,-11,22,0.5,"max");
+            moveDS(startXTracker,startYTracker,-13,22,0.5,"down");
 
-
-            clawClose();
             armDown();
             intakeOn();
             sleep(1500);
 
             moveDS(startXTracker,startYTracker,-10,11,0.3,"down");
 
-            moveDS(startXTracker,startYTracker,-28.5,6.0,0.6,"none");
+            moveDS(startXTracker,startYTracker,-28.5,5.0,0.6,"none");
 
-
-
-            //putbhrer uwuwuwuwuw
 
 
             whipitout();
@@ -230,10 +219,10 @@ public class UnitTest3 extends LinearOpMode {
 
 
 
-            sleep(500);
+            sleep(1000);
             s3.setPosition(0.55);
 
-            moveDS(startXTracker,startYTracker,-18,22,0.7,"down");
+            moveDS(startXTracker,startYTracker,-20,22,0.7,"down");
 
             clawClose();
             armDown();
@@ -242,7 +231,7 @@ public class UnitTest3 extends LinearOpMode {
 
             moveDS(startXTracker,startYTracker,-19,11,0.3,"down");
 
-            moveDS(startXTracker,startYTracker,-28.5,6.0,0.6,"none");
+            moveDS(startXTracker,startYTracker,-28.5,6.5,0.6,"none");
 
 
 
@@ -264,20 +253,16 @@ public class UnitTest3 extends LinearOpMode {
             sleep(1900);
             deposit();
             m2.setPower(0.1);
+            sleep(1000);
             s3.setPosition(0.55);
+            whipitout();
 
 
             moveDS(startXTracker,startYTracker,7,60,0.8,"down");
 
 
 
-
-
-
-
-
             sleep(90000000);
-
 
 
         }
