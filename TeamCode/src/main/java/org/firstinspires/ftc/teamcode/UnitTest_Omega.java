@@ -179,13 +179,11 @@ public class UnitTest_Omega extends LinearOpMode {
 //
 //
 
-            whipitout();
+            armMiddle();
             moveDS(startXTracker,startYTracker,-28.5,5.0,0.6,"max");
 
-            m2.setPower(1);
-            sleep(1900);
+
             deposit();
-            m2.setPower(0.1);
             sleep(1000);
             s3.setPosition(0.55);
 
@@ -193,9 +191,9 @@ public class UnitTest_Omega extends LinearOpMode {
 
             armDown();
             intakeOn();
-            sleep(1500);
+            sleep(400);
 
-            moveDS(startXTracker,startYTracker,-10,11,0.3,"down");
+            moveDS(startXTracker,startYTracker,-8.5,11,0.3,"down");
 
             moveDS(startXTracker,startYTracker,-28.5,5.0,0.6,"none");
 
@@ -204,10 +202,11 @@ public class UnitTest_Omega extends LinearOpMode {
             whipitout();
             intakeOn();
             armUp();
-            sleep(1100);
+            sleep(1500);
 
             intakeBack();
-            sleep(700);
+            s3.setPosition(0.3);
+            sleep(200);
 
             whipitout();
             sleep(200);
@@ -244,7 +243,8 @@ public class UnitTest_Omega extends LinearOpMode {
             sleep(1500);
 
             intakeBack();
-            sleep(700);
+            s3.setPosition(0.3);
+            sleep(200);
 
             whipitout();
             sleep(200);
@@ -255,10 +255,14 @@ public class UnitTest_Omega extends LinearOpMode {
             m2.setPower(0.1);
             sleep(1000);
             s3.setPosition(0.55);
-            whipitout();
+            armMiddle();
 
 
-            moveDS(startXTracker,startYTracker,7,60,0.8,"down");
+            moveDS(startXTracker,startYTracker,12.0,60.0,0.8,"down");
+
+            slidePark();
+
+
 
 
 
@@ -313,6 +317,18 @@ public class UnitTest_Omega extends LinearOpMode {
 //                    sleep(100);
 //                    s12.setPosition(0.5);
 
+    }
+    public void armMiddle() {
+        s2.setPosition(0.35);
+        s5.setPosition(0.6);
+
+    }
+
+    public void slidePark(){
+       while(m2.getCurrentPosition() < 950) {
+           m2.setPower(1);
+       }
+       m2.setPower(0.1);
     }
 
     public void intakeBack(){
@@ -540,7 +556,7 @@ public class UnitTest_Omega extends LinearOpMode {
                 m2.setPower(0.1);
             }
 
-            if (LslideType == "down"&& m2.getCurrentPosition()>20){
+            if (LslideType == "down"&& m2.getCurrentPosition()>150){
                 m2.setDirection(DcMotorSimple.Direction.REVERSE);
                 m2.setPower(-1);
             }else if ( LslideType == "down" && m2.getCurrentPosition() < 20){
@@ -592,7 +608,6 @@ public class UnitTest_Omega extends LinearOpMode {
         startYTracker = (br.getCurrentPosition() / ENC2DIST) + startY; //Adding the current movement to previous movements for x
         startXTracker = (fl.getCurrentPosition() / ENC2DIST_SIDEWAYS) + startX; // Adding current movement to previous movements for y
         // apply zero power to avoid continuous power to the wheels
-        turnToZeroAngle();
         setMotorToZeroPower();
 
 
