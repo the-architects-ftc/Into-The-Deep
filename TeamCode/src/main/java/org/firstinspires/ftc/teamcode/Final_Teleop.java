@@ -232,21 +232,15 @@ public class Final_Teleop extends LinearOpMode {
 
 
             if (gamepad1.dpad_right != gamepad1dpadRight_previous && gamepad1.dpad_right) {
-                s2.setPosition(0.45);
-                s5.setPosition(0.45);
+                s2.setPosition(0.5);
+                s5.setPosition(0.55);
             }
             //higher value s5 means further back
             gamepad1dpadRight_previous = gamepad1.dpad_right;
 
             if (gamepad1.dpad_left != gamepad1dpadLeft_previous && gamepad1.dpad_left) {
-                // s12.setPosition(1);
-                //sleep(100);
-                s2.setPosition(0.35);
-                //s6.setPosition(0.5);
-                //s12.setPosition(1);
-//                    sleep(100);
-//                    s12.setPosition(0.5);
-                s5.setPosition(1);
+                s2.setPosition(0.3);
+                s5.setPosition(0.82);
             }
             gamepad1dpadLeft_previous = gamepad1.dpad_left;
 

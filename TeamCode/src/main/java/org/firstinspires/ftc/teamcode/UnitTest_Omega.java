@@ -303,15 +303,14 @@ public class UnitTest_Omega extends LinearOpMode {
     }
 
     public void armDown(){
-        s2.setPosition(0.45);
-        sleep(500);
-        s5.setPosition(0.45);
+        s2.setPosition(0.5);
+        s5.setPosition(0.55);
     }
 
     public void armUp(){
 
-        s2.setPosition(0.35);
-        s5.setPosition(1);
+        s2.setPosition(0.3);
+        s5.setPosition(0.9);
         //s6.setPosition(0.5);
         //s12.setPosition(1);
 //                    sleep(100);
