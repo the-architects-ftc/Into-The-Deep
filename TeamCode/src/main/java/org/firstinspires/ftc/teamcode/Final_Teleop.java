@@ -224,7 +224,7 @@ public class Final_Teleop extends LinearOpMode {
 
 
             if (gamepad1.dpad_down != gamepad1dpadDown_previous && gamepad1.dpad_down) {
-                s2.setPosition(0.35);
+                s2.setPosition(0.4);
                 s5.setPosition(0.6);
             }
             //lower s2 value means further back
@@ -232,7 +232,7 @@ public class Final_Teleop extends LinearOpMode {
 
 
             if (gamepad1.dpad_right != gamepad1dpadRight_previous && gamepad1.dpad_right) {
-                s2.setPosition(0.5);
+                s2.setPosition(0.525);
                 s5.setPosition(0.55);
             }
             //higher value s5 means further back
@@ -240,7 +240,7 @@ public class Final_Teleop extends LinearOpMode {
 
             if (gamepad1.dpad_left != gamepad1dpadLeft_previous && gamepad1.dpad_left) {
                 s2.setPosition(0.3);
-                s5.setPosition(0.82);
+                s5.setPosition(0.86);
             }
             gamepad1dpadLeft_previous = gamepad1.dpad_left;
 
@@ -268,7 +268,7 @@ public class Final_Teleop extends LinearOpMode {
 
             if (gamepad1.left_trigger > 0.2) {
                 s3.setDirection(Servo.Direction.FORWARD);
-                s3.setPosition(0.77); //down
+                s3.setPosition(0.75); //down
             }
 
             //specimen claw

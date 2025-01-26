@@ -64,8 +64,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
  */
 
 
-@Autonomous(name="Unit_Test_Omega", group="Linear Opmode2")
-public class UnitTest_Omega extends LinearOpMode {
+@Autonomous(name="Auto_Basket", group="Linear Opmode2")
+public class Auto_Basket extends LinearOpMode {
 
     double ENC2DIST = 2000.0/3.9558976; //2000.0/48.0; // FW/BW
     double ENC2DIST_SIDEWAYS = 2000.0/3.9558976;
@@ -148,9 +148,11 @@ public class UnitTest_Omega extends LinearOpMode {
 
         //setup
         telemetry.setAutoClear(true);
+
         // initialize hardware
 
         clawClose();
+        s3.setPosition(0.45);
 //        s5.setPosition(0.28);
 //        s3.setPosition(0.3);
 
@@ -191,21 +193,21 @@ public class UnitTest_Omega extends LinearOpMode {
 
             armDown();
             intakeOn();
-            sleep(400);
+            sleep(100);
 
-            moveDS(startXTracker,startYTracker,-8.5,11,0.3,"down");
+            moveDS(startXTracker,startYTracker,-7.5,11,0.3,"down");
 
-            moveDS(startXTracker,startYTracker,-28.5,5.0,0.6,"none");
+            moveDS(startXTracker,startYTracker,-28.5,8.0,0.6,"none");
 
 
 
             whipitout();
             intakeOn();
             armUp();
-            sleep(1500);
+            sleep(1300);
 
             intakeBack();
-            s3.setPosition(0.3);
+
             sleep(200);
 
             whipitout();
@@ -213,24 +215,25 @@ public class UnitTest_Omega extends LinearOpMode {
 
             m2.setPower(1);
             sleep(1900);
-            deposit();
             m2.setPower(0.1);
 
-
-
+            moveDS(startXTracker,startYTracker,-28.5,4.5,1,"none");
+            deposit();
             sleep(1000);
             s3.setPosition(0.55);
+            armMiddle();
 
-            moveDS(startXTracker,startYTracker,-20,22,0.7,"down");
+
+            moveDS(startXTracker,startYTracker,-20.5,22,0.7,"down");
 
             clawClose();
             armDown();
             intakeOn();
-            sleep(900);
+            sleep(100);
 
-            moveDS(startXTracker,startYTracker,-19,11,0.3,"down");
+            moveDS(startXTracker,startYTracker,-19.0,9,0.3,"down");
 
-            moveDS(startXTracker,startYTracker,-28.5,6.5,0.6,"none");
+            moveDS(startXTracker,startYTracker,-28.5,8.5,0.6,"none");
 
 
 
@@ -243,7 +246,6 @@ public class UnitTest_Omega extends LinearOpMode {
             sleep(1500);
 
             intakeBack();
-            s3.setPosition(0.3);
             sleep(200);
 
             whipitout();
@@ -251,19 +253,19 @@ public class UnitTest_Omega extends LinearOpMode {
 
             m2.setPower(1);
             sleep(1900);
-            deposit();
+
             m2.setPower(0.1);
+
+            moveDS(startXTracker,startYTracker,-28.5,4.0,1,"none");
+            deposit();
             sleep(1000);
             s3.setPosition(0.55);
             armMiddle();
 
+            moveDS(startXTracker,startYTracker,19.0,65.0,0.8,"down");
 
-            moveDS(startXTracker,startYTracker,12.0,60.0,0.8,"down");
 
             slidePark();
-
-
-
 
 
             sleep(90000000);
@@ -324,7 +326,7 @@ public class UnitTest_Omega extends LinearOpMode {
     }
 
     public void slidePark(){
-       while(m2.getCurrentPosition() < 950) {
+       while(m2.getCurrentPosition() < 1100) {
            m2.setPower(1);
        }
        m2.setPower(0.1);
@@ -346,7 +348,7 @@ public class UnitTest_Omega extends LinearOpMode {
 
     public void deposit(){
         s3.setDirection(Servo.Direction.FORWARD);
-        s3.setPosition(0.75); //down
+        s3.setPosition(0.7); //down
     }
 
     public void slideDown(){
