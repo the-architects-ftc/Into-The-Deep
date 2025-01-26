@@ -41,7 +41,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
-import com.qualcomm.hardware.limelightvision.Limelight3A;
+
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
@@ -93,7 +93,7 @@ public class FinalSpecimenAuto extends LinearOpMode {
     DcMotor fr = null;
     DcMotor br = null;
     DcMotor m2 = null;
-    private Limelight3A limelight;
+
     Servo s2 = null;
     Servo s5 = null;
     Servo lc = null;
@@ -153,7 +153,7 @@ public class FinalSpecimenAuto extends LinearOpMode {
 //        s5.setPosition(0.28);
 //        s3.setPosition(0.3);
 
-        //limelight
+
 
         // Wait for the game to start (driver presses PLAY)
         s3.setDirection(Servo.Direction.FORWARD);
@@ -188,8 +188,10 @@ public class FinalSpecimenAuto extends LinearOpMode {
             m2.setPower(-1);
             sleep(425); //was 400
             m2.setPower(0.05);
-            moveDS(0,0,0,10,0.8,"none");
-            moveDS(startXTracker,startYTracker,-42,10,0.8,"none");
+            moveDS(0,0,0,5,0.8,"none");
+
+            moveDS(startXTracker,startYTracker,-42,5,0.8,"none");
+            sleep(2000);
             moveDS(startXTracker,startYTracker,-42,18,0.5,"none");  //was 17
             moveDS(startXTracker,startYTracker,-42,21,0.3,"none");  //was 17
 
@@ -212,6 +214,7 @@ public class FinalSpecimenAuto extends LinearOpMode {
 
 
             moveDS(0,0,-8,15,0.5,"none"); //was 11
+            moveDS(0,0,0,5,0.4,"none"); //MAYBE REMOVE IT HAS FAILSAFE
 
             sleep(300);
             m2.setPower(-1);

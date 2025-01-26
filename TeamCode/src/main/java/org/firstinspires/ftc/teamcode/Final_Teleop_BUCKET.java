@@ -18,9 +18,9 @@ import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 
 
-@TeleOp(name="Final_Teleop", group="Exercises")
+@TeleOp(name="Final_Teleop_BUCKET", group="Exercises")
 //@Disabled
-public class Final_Teleop extends LinearOpMode {
+public class Final_Teleop_BUCKET extends LinearOpMode {
     BHI260IMU imu;
     DcMotor bl = null;
     DcMotor fl = null;

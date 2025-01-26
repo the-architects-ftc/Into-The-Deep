@@ -41,7 +41,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
-import com.qualcomm.hardware.limelightvision.Limelight3A;
+
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
@@ -93,7 +93,7 @@ public class FinalAuto_Basket extends LinearOpMode {
     DcMotor fr = null;
     DcMotor br = null;
     DcMotor m2 = null;
-    private Limelight3A limelight;
+
     Servo s2 = null;
     Servo s5 = null;
     Servo lc = null;
@@ -155,13 +155,7 @@ public class FinalAuto_Basket extends LinearOpMode {
 //        s5.setPosition(0.28);
 //        s3.setPosition(0.3);
 
-        //limelight
-        limelight = hardwareMap.get(Limelight3A.class, "limelight");
-        limelight.setPollRateHz(100);
-        telemetry.setMsTransmissionInterval(11);
-        telemetry.update();
-        limelight.pipelineSwitch(4);
-        limelight.start();
+
 
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
@@ -230,7 +224,7 @@ public class FinalAuto_Basket extends LinearOpMode {
             intakeOn();
             sleep(100);
 
-            moveDS(startXTracker,startYTracker,-18.5,8.0,0.3,"down");
+            moveDS(startXTracker,startYTracker,-17.0,8.0,0.3,"down");
 
             moveDS(startXTracker,startYTracker,-28.5,8.5,0.6,"none");
 
@@ -255,7 +249,7 @@ public class FinalAuto_Basket extends LinearOpMode {
 
             m2.setPower(0.1);
 
-            moveDS(startXTracker,startYTracker,-28.5,4.0,1,"none");
+            moveDS(startXTracker,startYTracker,-28.5,4.5,1,"none");
             deposit();
             sleep(1000);
             s3.setPosition(0.55);
