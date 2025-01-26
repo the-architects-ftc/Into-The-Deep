@@ -231,7 +231,7 @@ public class Auto_Basket extends LinearOpMode {
             intakeOn();
             sleep(100);
 
-            moveDS(startXTracker,startYTracker,-19.0,9,0.3,"down");
+            moveDS(startXTracker,startYTracker,-18.5,8.0,0.3,"down");
 
             moveDS(startXTracker,startYTracker,-28.5,8.5,0.6,"none");
 
