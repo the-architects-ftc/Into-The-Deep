@@ -41,7 +41,6 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
-import com.qualcomm.hardware.limelightvision.LLResult;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
@@ -64,8 +63,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
  */
 
 
-@Autonomous(name="Autoright", group="Linear Opmode2")
-public class AutoRight extends LinearOpMode {
+@Autonomous(name="FinalSpecimenAuto", group="Linear Opmode2")
+public class FinalSpecimenAuto extends LinearOpMode {
 
     double ENC2DIST = 2000.0/3.9558976; //2000.0/48.0; // FW/BW
     double ENC2DIST_SIDEWAYS = 2000.0/3.9558976;
@@ -173,10 +172,10 @@ public class AutoRight extends LinearOpMode {
 
 
 //
-            moveDS(startXTracker,startYTracker,-10,31,1,"specimen");  //WAS 30
+            moveDS(startXTracker,startYTracker,-10,33,0.5,"specimen");  //WAS 33
             //sleep(300);
             m2.setPower(-1);
-            sleep(400); //was 450
+            sleep(450); //was 400
             m2.setPower(0.05);
             clawOpen();
             moveDS(startXTracker,startYTracker,-5,21.5,1,"none");
@@ -187,46 +186,45 @@ public class AutoRight extends LinearOpMode {
             //turn("left",6); //was 5 try 7
 
             m2.setPower(-1);
-            sleep(450); //was 400
+            sleep(425); //was 400
             m2.setPower(0.05);
-            moveDS(0,0,-42,18,1,"none");
-//            moveDS(startXTracker,startYTracker,-42,18,0.5,"none");  //was 17
-            moveDS(startXTracker,startYTracker,-42,24.3,0.3,"none");  //was 17
+            moveDS(0,0,0,10,0.8,"none");
+            moveDS(startXTracker,startYTracker,-42,10,0.8,"none");
+            moveDS(startXTracker,startYTracker,-42,18,0.5,"none");  //was 17
+            moveDS(startXTracker,startYTracker,-42,21,0.3,"none");  //was 17
 
+            sleep(300);
             clawClose();
-            sleep(500);
+            sleep(1000);
 
             m2.setPower(1);
             sleep(100); //was 845
             m2.setPower(0.05);
 
-            moveDS(startXTracker,startYTracker,0,0,1,"none");
+            moveDS(startXTracker,startYTracker,0,0,0.8,"none");
 
-            sleep(200);
-            turn("right",179);
+            sleep(500);
+            turn("right",90);
+            turn("right",90);
             m2.setPower(1);
             sleep(650); //was 840
             m2.setPower(0.05);
 
-           moveDS(0,0,-2,14.3,1,"none"); //was 11
 
+            moveDS(0,0,-8,15,0.5,"none"); //was 11
 
+            sleep(300);
             m2.setPower(-1);
             sleep(400); //was 400
             m2.setPower(0.05);
             clawOpen();
+            moveDS(0,0,0,-15,1,"none");
+            moveDS(0,0,50,-15,1,"none");
 
+//ABOVE HERE
 
-
-            moveDS(0,0,0,-10,1,"none");
-
-            m2.setPower(-1);
-            sleep(450); //was 400
-            m2.setPower(0.05);
-
-//            moveDS(startXTracker,startYTracker,40,-10,1,"none");
-//            moveDS(startXTracker,startYTracker,37,7,1,"none");
-//            moveDS(startXTracker,startYTracker,45,15,1,"none");
+//            moveDS(0,0,0,-7,1,"none");
+//            moveDS(startXTracker,startYTracker,42,-7,1,"none");
 
 
 
