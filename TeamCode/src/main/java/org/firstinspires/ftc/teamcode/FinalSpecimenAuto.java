@@ -41,7 +41,6 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
-import com.qualcomm.hardware.limelightvision.LLResult;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
@@ -64,8 +63,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
  */
 
 
-@Autonomous(name="SlowAutoright", group="Linear Opmode2")
-public class SlowRightAuto extends LinearOpMode {
+@Autonomous(name="FinalSpecimenAuto", group="Linear Opmode2")
+public class FinalSpecimenAuto extends LinearOpMode {
 
     double ENC2DIST = 2000.0/3.9558976; //2000.0/48.0; // FW/BW
     double ENC2DIST_SIDEWAYS = 2000.0/3.9558976;
